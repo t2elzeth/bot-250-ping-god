@@ -22,7 +22,8 @@ public sealed class AnabruhateTelegramCommandHandler : ITelegramCommandHandler
         //language=sql
         const string sql = @"
 select t.id
-  from bot.group_members t 
+  from bot.group_members t
+ where t.is_deleted = false
  order by random()
  limit 1;
 ";
