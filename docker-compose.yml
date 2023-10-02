@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  database:
+    image: postgres:14
+    container_name: bot-250-ping-god-db
+    networks:
+      - bot-250-ping-god-net
+    volumes:
+      - "bot-250-ping-god-db-data:/var/lib/postgresql/data"
+      - ./migrations/create-database:/docker-entrypoint-initdb.d
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_PASSWORD: 123
+
+networks:
+  bot-250-ping-god-net:
+    driver: bridge
+volumes:
+  bot-250-ping-god-db-data:
+    name: "bot-250-ping-god-db-data"

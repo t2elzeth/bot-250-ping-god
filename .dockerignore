@@ -1,0 +1,5 @@
+.idea/
+**/bin/
+**/obj/
+src/BackOffice/Web/**/node_modules/
+src/BackOffice/Web/**/build/
