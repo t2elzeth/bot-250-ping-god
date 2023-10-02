@@ -27,7 +27,8 @@ public sealed class TelegramBot
     {
         ReceiverOptions receiverOptions = new()
         {
-            AllowedUpdates = Array.Empty<UpdateType>()
+            AllowedUpdates      = Array.Empty<UpdateType>(),
+            ThrowPendingUpdates = false
         };
 
         _botClient.StartReceiving(updateHandler: HandleUpdateAsync,
