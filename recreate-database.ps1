@@ -8,3 +8,5 @@ Sleep 2
 
 .\migrate.cmd
 
+.\migrate-seeds.cmd
+

@@ -8,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 
-namespace Bot;
+namespace Bot250PingGod;
 
 public static class Program
 {
-    private const string TelegramBotToken = "1108152066:AAGKqFVY3el4lnHGdGwpnJUvTQlqNf42PhM";
+    private const string TelegramBotToken = "6678696659:AAGzrzRk9ajwD83QBrcrdAL0GBZkPmtR9Eg";
 
     public static async Task Main()
     {

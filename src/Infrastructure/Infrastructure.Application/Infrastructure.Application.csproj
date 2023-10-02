@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj" />
+    <ProjectReference Include="..\Infrastructure.Logging\Infrastructure.Logging.csproj" />
+  </ItemGroup>
+</Project>

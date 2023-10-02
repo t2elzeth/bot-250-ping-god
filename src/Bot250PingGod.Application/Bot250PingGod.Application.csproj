@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Infrastructure\Infrastructure.AspNetCore\Infrastructure.AspNetCore.csproj" />
         <ProjectReference Include="..\Infrastructure\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj"/>
         <ProjectReference Include="..\Bot250PingGod.Core\Bot250PingGod.Core.csproj" />
     </ItemGroup>

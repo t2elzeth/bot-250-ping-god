@@ -1,12 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace Bot250PingGod.Application;
 
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class TelegramMessage
 {
     public required long ChatId;
     public required string FullMessageText;
 
+    [UsedImplicitly]
     protected TelegramMessage()
     {
     }
@@ -14,9 +17,6 @@ public abstract class TelegramMessage
 
 public sealed class TelegramCommand : TelegramMessage
 {
-    public const string AskCommand = "/ask";
-    public const string AbruhateCommand = "/abruhate";
-
     public required string Command;
 
     public string? MessageText;
