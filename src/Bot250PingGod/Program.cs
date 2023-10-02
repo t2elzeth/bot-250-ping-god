@@ -19,7 +19,8 @@ public static class Program
         using CancellationTokenSource cts = new();
 
         var builder = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json");
+                      .AddJsonFile("appsettings.json")
+                      .AddEnvironmentVariables();
 
         var configuration = builder.Build();
 
@@ -32,6 +33,8 @@ public static class Program
         var bot = container.Resolve<TelegramBot>();
 
         await bot.RunAsync(cts.Token);
+
+        Console.ReadLine();
 
         cts.Cancel();
     }

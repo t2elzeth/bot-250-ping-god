@@ -1,6 +1,15 @@
 version: "3"
 
 services:
+  bot-250-ping-god:
+    build: ./src/Bot250PingGod/
+    environment:
+      ConnectionStrings__Default: User ID=t2elzeth;Password=123;Host=database;Port=5432;Database=bot_250_ping_god_db;Pooling=true
+    networks:
+      - bot-250-ping-god-net
+    stdin_open: true
+    tty: true
+
   database:
     image: postgres:14
     container_name: bot-250-ping-god-db
