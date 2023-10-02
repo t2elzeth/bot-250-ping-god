@@ -2,6 +2,7 @@
 using Dapper;
 using Infrastructure.DataAccess;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 
 namespace Bot250PingGod.Application.Commands;
 
@@ -35,10 +36,11 @@ select t.id
 
         var groupMember = await _groupMemberRepository.GetAsync(anabruhatedUserId, cancellationToken);
 
-        var messageText = $"@{groupMember.Username} пошел нахуй";
+        var messageText = $"<i>{groupMember.Username}</i> пошел нахуй";
 
         await _botClient.SendTextMessageAsync(chatId: command.ChatId,
                                               text: messageText,
+                                              parseMode: ParseMode.Html,
                                               cancellationToken: cancellationToken);
 
         groupMember.Anabruhate();
