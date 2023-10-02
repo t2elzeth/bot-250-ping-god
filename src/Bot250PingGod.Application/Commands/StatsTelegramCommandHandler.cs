@@ -31,7 +31,7 @@ select t.username,
 
         var groupMembersCountArray = groupMembers.Select(x => $"{x.Username} - {x.AnabruhateCount}");
 
-        var messageText = $"Статистика анабрюхачивания: \n{string.Join('\n', groupMembersCountArray)}";
+        var messageText = $"Статистика анабрюхативания: \n{string.Join('\n', groupMembersCountArray)}";
 
         await _botClient.SendTextMessageAsync(chatId: command.ChatId,
                                               text: messageText,
