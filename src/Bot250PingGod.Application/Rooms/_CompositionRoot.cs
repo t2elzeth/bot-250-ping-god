@@ -10,5 +10,6 @@ public class CompositionRoot : Module
     {
         builder.RegisterType<QuestionRepository>().SingleInstance();
         builder.RegisterType<EasterEggRepository>().SingleInstance();
+        builder.RegisterType<GroupMemberRepository>().SingleInstance();
     }
 }

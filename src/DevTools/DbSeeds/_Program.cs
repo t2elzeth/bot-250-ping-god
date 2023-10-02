@@ -51,7 +51,7 @@ using (new SeedContext())
 {
     await using var transaction = new DbTransaction();
 
-    await seedRunner.RunAsync<AnabruhatedUsersSeedBundle>();
+    await seedRunner.RunAsync<GroupMembersSeedBundle>();
 
     await transaction.CommitAsync();
 

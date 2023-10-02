@@ -6,14 +6,16 @@ using JetBrains.Annotations;
 namespace Bot250PingGod.Application.Nh;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public sealed class AnabruhatedUserMap : ClassMap<AnabruhatedUser>
+public sealed class GroupMemberMap : ClassMap<GroupMember>
 {
-    public AnabruhatedUserMap()
+    public GroupMemberMap()
     {
         Schema(DatabaseSchemas.Bot);
 
         Id(x => x.Id);
 
         Map(x => x.Username);
+
+        Map(x => x.AnabruhateCount);
     }
 }
