@@ -12,8 +12,6 @@ namespace Bot250PingGod;
 
 public static class Program
 {
-    private const string TelegramBotToken = "6678696659:AAGzrzRk9ajwD83QBrcrdAL0GBZkPmtR9Eg";
-
     public static async Task Main()
     {
         using CancellationTokenSource cts = new();
@@ -26,7 +24,9 @@ public static class Program
 
         ConnectionStringsManager.ReadFromConfiguration(configuration);
 
-        var botClient = new TelegramBotClient(TelegramBotToken);
+        var botToken = configuration.GetValue<string>("TelegramBotToken");
+
+        var botClient = new TelegramBotClient(botToken!);
 
         var container = BuildContainer(botClient);
 
