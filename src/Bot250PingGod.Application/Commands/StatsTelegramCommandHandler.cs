@@ -18,10 +18,10 @@ public sealed class StatsTelegramCommandHandler : ITelegramCommandHandler
     {
         //language=sql
         const string sql = @"
-select t.username,
+select row_number() over (order by t.anabruhate_count desc) as row_number,
+       t.username,
        t.anabruhate_count
-  from bot.group_members t 
- order by t.anabruhate_count desc;
+from bot.group_members t;
 ";
 
         var dbSession  = DbSession.Current;
@@ -29,7 +29,7 @@ select t.username,
 
         var groupMembers = await connection.QueryAsync<GroupMemberRow>(sql, cancellationToken);
 
-        var groupMembersCountArray = groupMembers.Select(x => $"{x.Username} - {x.AnabruhateCount}");
+        var groupMembersCountArray = groupMembers.Select(x => $"{x.RowNumber}. {x.Username} - {x.AnabruhateCount}");
 
         var messageText = $"Статистика анабрюхативания: \n{string.Join('\n', groupMembersCountArray)}";
 
@@ -41,6 +41,8 @@ select t.username,
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     private sealed class GroupMemberRow
     {
+        public long RowNumber { get; init; }
+
         public string Username { get; init; } = null!;
 
         public long AnabruhateCount { get; init; }
