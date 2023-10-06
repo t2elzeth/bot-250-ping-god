@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Bot250PingGod.Application;
 using Infrastructure.DataAccess;
+using Infrastructure.Seedwork.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,8 +35,6 @@ public static class Program
 
         await bot.RunAsync(cts.Token);
 
-        Console.ReadLine();
-
         cts.Cancel();
     }
 
@@ -54,6 +53,12 @@ public static class Program
 
         builder.RegisterInstance(botClient).As<ITelegramBotClient>();
         builder.RegisterInstance(NhSessionFactory.Instance);
+
+        builder.RegisterInstance(new SystemEnvironmentConfiguration
+        {
+            SystemTimeZone = "Central Asia Standard Time",
+            Standby        = false
+        });
 
         return builder.Build();
     }

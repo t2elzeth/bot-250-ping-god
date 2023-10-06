@@ -17,5 +17,11 @@ public sealed class GroupMemberMap : ClassMap<GroupMember>
         Map(x => x.Username);
 
         Map(x => x.AnabruhateCount);
+
+        Map(x => x.ChatId);
+
+        Map(x => x.LastAnabruhateDateTime);
+
+        Map(x => x.LastHourAnabruhateCount);
     }
 }

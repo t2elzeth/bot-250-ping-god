@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
+using Telegram.Bot.Types;
 
 namespace Bot250PingGod.Application;
 
@@ -21,13 +22,18 @@ public sealed class TelegramCommand : TelegramMessage
 
     public string? MessageText;
 
+    public Message Message = null!;
+
     public bool IsEasterEgg => Command.StartsWith("!");
 
     private TelegramCommand()
     {
     }
 
-    public static bool TryCreate(long chatId, string fullMessageText, [NotNullWhen(true)] out TelegramCommand? command)
+    public static bool TryCreate(long chatId,
+                                 string fullMessageText,
+                                 Message message,
+                                 [NotNullWhen(true)] out TelegramCommand? command)
     {
         command = null;
 
@@ -47,7 +53,8 @@ public sealed class TelegramCommand : TelegramMessage
             ChatId          = chatId,
             FullMessageText = fullMessageText,
             Command         = commandText,
-            MessageText     = messageText
+            MessageText     = messageText,
+            Message         = message
         };
 
         return true;

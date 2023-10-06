@@ -16,3 +16,19 @@ alter table bot.group_members
 alter table bot.group_members
     alter column is_deleted drop default;
 --rollback ;
+
+--changeset uamangeldiev:30
+alter table bot.group_members
+    add constraint pk_group_members primary key (id);
+--rollback ;
+
+--changeset uamangeldiev:40
+alter table bot.group_members
+    add column chat_id bigint null;
+--rollback ;
+
+--changeset uamangeldiev:50
+alter table bot.group_members
+    add column last_anabruhate_date_time  timestamp null,
+    add column last_hour_anabruhate_count bigint    not null default 0;
+--rollback ;

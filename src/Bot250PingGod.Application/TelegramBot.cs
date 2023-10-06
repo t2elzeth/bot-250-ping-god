@@ -71,11 +71,11 @@ public sealed class TelegramBot
             return;
 
         var chatId = message.Chat.Id;
-
+        
         _logger.LogInformation("Received a '{MessageText}' message in chat {ChatId}",
                                messageText, chatId);
 
-        if (TelegramCommand.TryCreate(chatId, messageText, out var command))
+        if (TelegramCommand.TryCreate(chatId, messageText, message, out var command))
         {
             await _telegramCommandHandler.HandleAsync(command, cancellationToken);
         }

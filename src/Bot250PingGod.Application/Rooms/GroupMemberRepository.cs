@@ -1,5 +1,6 @@
 ﻿using Bot250PingGod.Core.Abruhate;
 using Infrastructure.DataAccess;
+using NHibernate.Linq;
 
 namespace Bot250PingGod.Application.Rooms;
 
@@ -16,6 +17,22 @@ public class GroupMemberRepository
         }
 
         return entity;
+    }
+
+    public async Task<GroupMember?> TryGetByUsernameAsync(string username, CancellationToken cancellationToken)
+    {
+        var nhSession = DbSession.CurrentNhSession;
+
+        return await nhSession.Query<GroupMember>()
+                              .FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
+    }
+
+    public async Task<GroupMember?> TryGetByChatIdAsync(long chatId, CancellationToken cancellationToken)
+    {
+        var nhSession = DbSession.CurrentNhSession;
+
+        return await nhSession.Query<GroupMember>()
+                              .FirstOrDefaultAsync(x => x.ChatId == chatId, cancellationToken);
     }
 
     public async Task SaveAsync(GroupMember entity, CancellationToken cancellationToken)
