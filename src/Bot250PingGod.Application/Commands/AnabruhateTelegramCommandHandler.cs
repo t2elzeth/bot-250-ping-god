@@ -52,13 +52,13 @@ select t.id
             if (groupMember is not null)
             {
                 var diff = dateTime.Value - groupMember.LastAnabruhateDateTime.Value;
-                if (diff.Hours >= 1)
+                if (diff.Minutes >= 30)
                     groupMember.UpdateLastAnabruhateDateTime(dateTime);
 
                 if (!groupMember.CanAnabruhate())
                 {
                     await _botClient.SendTextMessageAsync(chatId: command.ChatId,
-                                                          text: $"Лимит анабрюхативаний исчерпан. Попробуйте через {60 - diff.Minutes} мин",
+                                                          text: $"Лимит анабрюхативаний исчерпан. Попробуйте через {30 - diff.Minutes} мин",
                                                           parseMode: ParseMode.Html,
                                                           cancellationToken: cancellationToken);
 
