@@ -10,11 +10,11 @@ public sealed class TelegramCommandHandler
 {
     private readonly ILogger<TelegramCommandHandler> _logger;
     private readonly ILifetimeScope _lifetimeScope;
-    private readonly TelegramBotClient _telegramBotClient;
+    private readonly ITelegramBotClient _telegramBotClient;
 
     public TelegramCommandHandler(ILogger<TelegramCommandHandler> logger,
                                   ILifetimeScope lifetimeScope,
-                                  TelegramBotClient telegramBotClient)
+                                  ITelegramBotClient telegramBotClient)
     {
         _logger            = logger;
         _lifetimeScope     = lifetimeScope;
