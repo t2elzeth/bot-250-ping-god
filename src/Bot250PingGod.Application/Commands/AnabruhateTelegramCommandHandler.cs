@@ -87,10 +87,10 @@ select t.id
             var limitExceededMessageText = $"{groupMember.Username}, твой лимит анабрюхативаний исчерпан. " +
                                            $"Попробуй через {30 - diff.Minutes} мин";
 
-            // await _botClient.SendTextMessageAsync(chatId: command.ChatId,
-                                                  // text: limitExceededMessageText,
-                                                  // parseMode: ParseMode.Html,
-                                                  // cancellationToken: cancellationToken);
+            await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+                                                  text: limitExceededMessageText,
+                                                  parseMode: ParseMode.Html,
+                                                  cancellationToken: cancellationToken);
 
             return;
         }
