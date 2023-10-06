@@ -13,7 +13,7 @@ public class GroupMember : Entity
 
     public virtual long? ChatId { get; protected set; }
 
-    public virtual UtcDateTime? LastAnabruhateDateTime { get; protected set; }
+    public virtual UtcDateTime LastAnabruhateDateTime { get; protected set; } = null!;
 
     public virtual long LastHourAnabruhateCount { get; protected set; }
 
@@ -21,21 +21,22 @@ public class GroupMember : Entity
     {
     }
 
-    public static GroupMember Create(string username)
+    public static GroupMember Create(UtcDateTime dateTime,
+                                     string username,
+                                     long chatId)
     {
         return new GroupMember
         {
-            IsDeleted       = false,
-            Username        = username,
-            AnabruhateCount = 0
+            IsDeleted              = false,
+            Username               = username,
+            AnabruhateCount        = 0,
+            ChatId                 = chatId,
+            LastAnabruhateDateTime = dateTime
         };
     }
 
-    public virtual bool CanAnabruhate(UtcDateTime dateTime)
+    public virtual bool CanAnabruhate()
     {
-        if (LastAnabruhateDateTime is null)
-            return true;
-
         return LastHourAnabruhateCount < 3;
     }
 

@@ -1,11 +1,9 @@
 ﻿using Bot250PingGod.Application.Rooms;
-using Bot250PingGod.Core.Abruhate;
 using Dapper;
 using Infrastructure.DataAccess;
 using Infrastructure.Seedwork.Providers;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Bot250PingGod.Application.Commands;
@@ -47,26 +45,30 @@ select t.id
 
         var randomMemberId = await connection.ExecuteScalarAsync<long>(sql, cancellationToken);
 
-        var groupMember = await HandleMessageFromUserAsync(message, cancellationToken);
-        if (groupMember is not null)
+        if (message.From is not null)
         {
-            var diff = dateTime.Value - groupMember.LastAnabruhateDateTime?.Value;
-            if (groupMember.LastAnabruhateDateTime is null || diff?.Hours >= 1)
-                groupMember.UpdateLastAnabruhateDateTime(dateTime);
+            var groupMember = await _groupMemberRepository.TryGetByChatIdAsync(message.From.Id, cancellationToken);
 
-            if (!groupMember.CanAnabruhate(dateTime))
+            if (groupMember is not null)
             {
-                await _botClient.SendTextMessageAsync(chatId: command.ChatId,
-                                                      text: "Лимит анабрюхативаний исчерпан",
-                                                      parseMode: ParseMode.Html,
-                                                      cancellationToken: cancellationToken);
+                var diff = dateTime.Value - groupMember.LastAnabruhateDateTime.Value;
+                if (diff.Hours >= 1)
+                    groupMember.UpdateLastAnabruhateDateTime(dateTime);
 
-                return;
+                if (!groupMember.CanAnabruhate())
+                {
+                    await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+                                                          text: $"Лимит анабрюхативаний исчерпан. Попробуйте через {61 - diff.Minutes} мин",
+                                                          parseMode: ParseMode.Html,
+                                                          cancellationToken: cancellationToken);
+
+                    return;
+                }
+
+                groupMember.IncreaseAnabruhateCount();
+
+                await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
             }
-
-            groupMember.IncreaseAnabruhateCount();
-
-            await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
         }
 
         var randomMember = await _groupMemberRepository.GetAsync(randomMemberId, cancellationToken);
@@ -84,25 +86,5 @@ select t.id
         randomMember.Anabruhate();
 
         await _groupMemberRepository.SaveAsync(randomMember, cancellationToken);
-    }
-
-    private async Task<GroupMember?> HandleMessageFromUserAsync(Message message,
-                                                                CancellationToken cancellationToken)
-    {
-        if (message.From is null)
-            return null;
-
-        var fromUser = message.From;
-
-        GroupMember? groupMember;
-
-        groupMember = await _groupMemberRepository.TryGetByChatIdAsync(fromUser.Id, cancellationToken);
-        if (groupMember is null && fromUser.Username is not null)
-        {
-            groupMember = await _groupMemberRepository.TryGetByUsernameAsync(fromUser.Username, cancellationToken);
-            groupMember?.UpdateChatId(message.From.Id);
-        }
-
-        return groupMember;
     }
 }

@@ -32,3 +32,8 @@ alter table bot.group_members
     add column last_anabruhate_date_time  timestamp null,
     add column last_hour_anabruhate_count bigint    not null default 0;
 --rollback ;
+
+--changeset uamangeldiev:60
+alter table bot.group_members
+    alter column last_anabruhate_date_time set not null;
+--rollback ;

@@ -1,5 +1,6 @@
 using Bot250PingGod.Core.Abruhate;
 using DbSeeds.Core;
+using Infrastructure.Seedwork.Providers;
 using JetBrains.Annotations;
 
 // ReSharper disable InconsistentNaming
@@ -8,40 +9,36 @@ namespace DbSeeds.BotSeedBundles;
 
 public class GroupMembersSeedBundle : SeedBundle
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
+
+    public GroupMembersSeedBundle(IDateTimeProvider dateTimeProvider)
+    {
+        _dateTimeProvider = dateTimeProvider;
+    }
+
     [MigrationSeed, UsedImplicitly]
     public async Task Admin()
     {
-        await GroupMember.Create(username: "t2elzeth")
+        var dateTime = _dateTimeProvider.Now();
+
+        await GroupMember.Create(dateTime: dateTime,
+                                 username: "t2elzeth",
+                                 chatId: 399344900)
                          .SaveAsync();
 
-        await GroupMember.Create(username: "Qwetryq")
+        await GroupMember.Create(dateTime: dateTime,
+                                 username: "snakerukapup",
+                                 chatId: 1064096284)
                          .SaveAsync();
 
-        await GroupMember.Create(username: "Konsteynto")
+        await GroupMember.Create(dateTime: dateTime,
+                                 username: "a1ibekk",
+                                 chatId: 639562476)
                          .SaveAsync();
 
-        await GroupMember.Create(username: "snakerukapup")
-                         .SaveAsync();
-
-        await GroupMember.Create(username: "a1ibekk")
-                         .SaveAsync();
-
-        await GroupMember.Create(username: "abu_hurayr4")
-                         .SaveAsync();
-
-        await GroupMember.Create(username: "Ai8oss")
-                         .SaveAsync();
-
-        await GroupMember.Create(username: "Teng1Zz")
-                         .SaveAsync();
-
-        await GroupMember.Create(username: "arigatonahui")
-                         .SaveAsync();
-
-        await GroupMember.Create(username: "kassellnotxd")
-                         .SaveAsync();
-
-        await GroupMember.Create(username: "bektur_ae")
+        await GroupMember.Create(dateTime: dateTime,
+                                 username: "bektur_ae",
+                                 chatId: 813010773)
                          .SaveAsync();
     }
 }
