@@ -30,7 +30,18 @@ public sealed class AnabruhateTelegramCommandHandler : ITelegramCommandHandler
     {
         var dateTime = _dateTimeProvider.Now();
 
-        var message    = command.Message;
+        var message = command.Message;
+        if (message.From is null)
+        {
+            _logger.LogWarning("Невозможно обработать команду {TelegramCommand}, не известный отправитель сообщения",
+                               command.Command);
+
+            return;
+        }
+
+        var username = message.From.Username ?? "username";
+        var userId   = message.From.Id;
+
         var dbSession  = DbSession.Current;
         var connection = dbSession.Connection;
 
@@ -45,38 +56,47 @@ select t.id
 
         var randomMemberId = await connection.ExecuteScalarAsync<long>(sql, cancellationToken);
 
-        if (message.From is not null)
+        var groupMember = await _groupMemberRepository.TryGetByChatIdAsync(message.From.Id, cancellationToken);
+        if (groupMember is null)
         {
-            var groupMember = await _groupMemberRepository.TryGetByChatIdAsync(message.From.Id, cancellationToken);
+            _logger.LogWarning("Невозможно обработать команду {TelegramCommand}, участник не зарегистрирован",
+                               command.Command);
 
-            if (groupMember is not null)
-            {
-                var diff = dateTime.Value - groupMember.LastAnabruhateDateTime.Value;
-                if (diff.Minutes >= 30)
-                    groupMember.UpdateLastAnabruhateDateTime(dateTime);
+            await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+                                                  text: $"Участник <i>{username}/{userId} не зарегистрирован",
+                                                  parseMode: ParseMode.Html,
+                                                  cancellationToken: cancellationToken);
 
-                if (!groupMember.CanAnabruhate())
-                {
-                    await _botClient.SendTextMessageAsync(chatId: command.ChatId,
-                                                          text: $"Лимит анабрюхативаний исчерпан. Попробуйте через {30 - diff.Minutes} мин",
-                                                          parseMode: ParseMode.Html,
-                                                          cancellationToken: cancellationToken);
-
-                    return;
-                }
-
-                groupMember.IncreaseAnabruhateCount();
-
-                await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
-            }
+            return;
         }
+
+        var diff = dateTime.Value - groupMember.LastAnabruhateDateTime.Value;
+        if (diff.Minutes >= 30)
+            groupMember.UpdateLastAnabruhateDateTime(dateTime);
+
+        if (!groupMember.CanAnabruhate())
+        {
+            var limitExceededMessageText = $"{groupMember.Username}, твой лимит анабрюхативаний исчерпан. " +
+                                           $"Попробуй через {30 - diff.Minutes} мин";
+
+            await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+                                                  text: limitExceededMessageText,
+                                                  parseMode: ParseMode.Html,
+                                                  cancellationToken: cancellationToken);
+
+            return;
+        }
+
+        groupMember.IncreaseAnabruhateCount();
+
+        await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
 
         var randomMember = await _groupMemberRepository.GetAsync(randomMemberId, cancellationToken);
 
         _logger.LogInformation("Участник@{GroupMemberUsername}/{GroupMemberChatId} анабрюхатит @{RandomMemberUsername}",
                                message.From?.Username ?? "NoUsername", message.From?.Id, randomMember.Username);
 
-        var messageText = $"<i>{randomMember.Username}</i> пошел нахуй";
+        var messageText = $"{groupMember.Username} анабрюхатит: <i>{randomMember.Username}</i> пошел нахуй";
 
         await _botClient.SendTextMessageAsync(chatId: command.ChatId,
                                               text: messageText,
