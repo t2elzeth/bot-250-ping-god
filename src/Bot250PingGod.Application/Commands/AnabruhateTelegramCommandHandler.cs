@@ -58,7 +58,7 @@ select t.id
                 if (!groupMember.CanAnabruhate())
                 {
                     await _botClient.SendTextMessageAsync(chatId: command.ChatId,
-                                                          text: $"Лимит анабрюхативаний исчерпан. Попробуйте через {61 - diff.Minutes} мин",
+                                                          text: $"Лимит анабрюхативаний исчерпан. Попробуйте через {60 - diff.Minutes} мин",
                                                           parseMode: ParseMode.Html,
                                                           cancellationToken: cancellationToken);
 
