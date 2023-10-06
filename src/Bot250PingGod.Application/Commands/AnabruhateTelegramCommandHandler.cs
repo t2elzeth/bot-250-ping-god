@@ -88,9 +88,7 @@ select t.id
         }
 
         groupMember.IncreaseAnabruhateCount();
-
-        await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
-
+        
         var randomMember = await _groupMemberRepository.GetAsync(randomMemberId, cancellationToken);
 
         _logger.LogInformation("Участник@{GroupMemberUsername}/{GroupMemberChatId} анабрюхатит @{RandomMemberUsername}",
@@ -105,6 +103,7 @@ select t.id
 
         randomMember.Anabruhate();
 
+        await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
         await _groupMemberRepository.SaveAsync(randomMember, cancellationToken);
     }
 }
