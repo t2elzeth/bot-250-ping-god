@@ -63,7 +63,7 @@ select t.id
                                command.Command);
 
             await _botClient.SendTextMessageAsync(chatId: command.ChatId,
-                                                  text: $"Участник <i>{username}/{userId} не зарегистрирован",
+                                                  text: $"Участник <i>{username}/{userId}</i> не зарегистрирован",
                                                   parseMode: ParseMode.Html,
                                                   cancellationToken: cancellationToken);
 
