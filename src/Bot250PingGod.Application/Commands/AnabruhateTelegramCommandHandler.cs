@@ -50,11 +50,19 @@ public sealed class AnabruhateTelegramCommandHandler : ITelegramCommandHandler
 select t.id
   from bot.group_members t
  where t.is_deleted = false
+   and t.chat_id != :userId
  order by random()
  limit 1;
 ";
 
-        var randomMemberId = await connection.ExecuteScalarAsync<long>(sql, cancellationToken);
+        var parameters = new
+        {
+            userId
+        };
+
+        var commandDefinition = new CommandDefinition(sql, parameters, cancellationToken: cancellationToken);
+
+        var randomMemberId = await connection.ExecuteScalarAsync<long>(commandDefinition);
 
         var groupMember = await _groupMemberRepository.TryGetByChatIdAsync(message.From.Id, cancellationToken);
         if (groupMember is null)
@@ -88,7 +96,7 @@ select t.id
         }
 
         groupMember.IncreaseAnabruhateCount();
-        
+
         var randomMember = await _groupMemberRepository.GetAsync(randomMemberId, cancellationToken);
 
         _logger.LogInformation("Участник@{GroupMemberUsername}/{GroupMemberChatId} анабрюхатит @{RandomMemberUsername}",
