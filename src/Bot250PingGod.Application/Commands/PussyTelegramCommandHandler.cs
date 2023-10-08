@@ -70,8 +70,8 @@ public sealed class PussyTelegramCommandHandler : ITelegramCommandHandler
 
         var growSize = groupMember.Pussy.GrowPussy(dateTime);
 
-        var messageText = $"{message.From.Username ?? message.From.FirstName}, твое женское достоинство увеличилось на {Math.Round(growSize, 2)} см. " +
-                          $"Теперь его длина: {groupMember.Pussy.Size} см";
+        var messageText = $"{message.From.Username ?? message.From.FirstName}, глубина твоей пусси увеличилась на {Math.Round(growSize, 2)} см. " +
+                          $"Теперь ее глубина: {groupMember.Pussy.Size} см";
 
         await _botClient.SendTextMessageAsync(chatId: chatId,
                                               text: messageText,

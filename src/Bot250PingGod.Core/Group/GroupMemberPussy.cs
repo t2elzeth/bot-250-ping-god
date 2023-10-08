@@ -26,9 +26,9 @@ public class GroupMemberPussy : Entity
     {
         var diff = dateTime.Value - LastGrowDateTime.Value;
 
-        tryAgainAfterMinutes = 60 - diff.Minutes;
+        tryAgainAfterMinutes = 30 - diff.Minutes;
 
-        return diff.Hours >= 1;
+        return diff.Minutes >= 30;
     }
 
     public virtual decimal GrowPussy(UtcDateTime dateTime)
