@@ -28,7 +28,7 @@ public class GroupMemberPussy : Entity
 
         tryAgainAfterMinutes = 30 - diff.Minutes;
 
-        return diff.Minutes >= 30;
+        return diff.TotalMinutes >= 30;
     }
 
     public virtual decimal GrowPussy(UtcDateTime dateTime)
