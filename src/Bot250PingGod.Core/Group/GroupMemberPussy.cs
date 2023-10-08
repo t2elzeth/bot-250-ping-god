@@ -18,7 +18,7 @@ public class GroupMemberPussy : Entity
         return new GroupMemberPussy
         {
             Size             = 0,
-            LastGrowDateTime = dateTime
+            LastGrowDateTime = dateTime - TimeSpan.FromHours(2)
         };
     }
 
