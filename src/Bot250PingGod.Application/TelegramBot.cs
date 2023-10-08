@@ -92,7 +92,7 @@ public sealed class TelegramBot
         if (message.Text is not { } messageText)
             return;
 
-        if (message.Chat.Type != ChatType.Group)
+        if (message.Chat.Type != ChatType.Group && message.Chat.Type != ChatType.Supergroup)
         {
             _logger.LogInformation("Cannot handle message from {ChatId}, chat type is {ChatType}",
                                    message.Chat.Id, message.Chat.Type);
