@@ -37,8 +37,3 @@ alter table bot.group_members
 alter table bot.group_members
     alter column last_anabruhate_date_time set not null;
 --rollback ;
-
---changeset uamangeldiev:70
-alter table bot.group_members
-    add constraint uq_group_id_member_id unique (group_id, member_id);
---rollback ;
