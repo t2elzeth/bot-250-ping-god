@@ -33,7 +33,7 @@ from bot.group_members t;
 
         var messageText = $"Статистика анабрюхативания: \n{string.Join('\n', groupMembersCountArray)}";
 
-        await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+        await _botClient.SendTextMessageAsync(chatId: command.Message.Chat.Id,
                                               text: messageText,
                                               cancellationToken: cancellationToken);
     }

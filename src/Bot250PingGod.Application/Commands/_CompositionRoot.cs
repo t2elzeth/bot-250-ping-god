@@ -9,18 +9,11 @@ public class CompositionRoot : Module
     protected override void Load(ContainerBuilder builder)
     {
         builder.RegisterType<TelegramCommandHandler>().SingleInstance();
-        builder.RegisterType<EasterEggHandler>().SingleInstance();
 
-        builder.RegisterType<AnabruhateTelegramCommandHandler>()
-               .Keyed<ITelegramCommandHandler>("/anabruhate");
+        builder.RegisterType<PussyTelegramCommandHandler>()
+               .Keyed<ITelegramCommandHandler>("/growpussy");
 
-        builder.RegisterType<AnabruhateTelegramCommandHandler>()
-               .Keyed<ITelegramCommandHandler>("/anabruhate@t2_250_ping_god_bot");
-
-        builder.RegisterType<StatsTelegramCommandHandler>()
-               .Keyed<ITelegramCommandHandler>("/stats");
-
-        builder.RegisterType<StatsTelegramCommandHandler>()
-               .Keyed<ITelegramCommandHandler>("/stats@t2_250_ping_god_bot");
+        builder.RegisterType<PussyTelegramCommandHandler>()
+               .Keyed<ITelegramCommandHandler>("/growpussy@t2_250_ping_god_bot");
     }
 }

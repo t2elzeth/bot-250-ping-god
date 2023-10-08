@@ -11,5 +11,7 @@ public class CompositionRoot : Module
         builder.RegisterType<QuestionRepository>().SingleInstance();
         builder.RegisterType<EasterEggRepository>().SingleInstance();
         builder.RegisterType<GroupMemberRepository>().SingleInstance();
+        builder.RegisterType<GroupRepository>().SingleInstance();
+        builder.RegisterType<MemberRepository>().SingleInstance();
     }
 }

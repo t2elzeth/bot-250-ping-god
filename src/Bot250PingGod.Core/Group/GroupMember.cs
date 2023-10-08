@@ -1,37 +1,40 @@
 ﻿using CSharpFunctionalExtensions;
 using Infrastructure.Seedwork.DataTypes;
 
-namespace Bot250PingGod.Core.Abruhate;
+namespace Bot250PingGod.Core.Group;
 
 public class GroupMember : Entity
 {
     public virtual bool IsDeleted { get; protected init; }
 
-    public virtual string Username { get; protected init; } = null!;
-
     public virtual long AnabruhateCount { get; protected set; }
-
-    public virtual long? ChatId { get; protected set; }
 
     public virtual UtcDateTime LastAnabruhateDateTime { get; protected set; } = null!;
 
     public virtual long LastHourAnabruhateCount { get; protected set; }
+
+    public virtual Group Group { get; protected set; } = null!;
+
+    public virtual Member Member { get; protected set; } = null!;
+
+    public virtual GroupMemberPussy Pussy { get; protected init; } = null!;
 
     protected GroupMember()
     {
     }
 
     public static GroupMember Create(UtcDateTime dateTime,
-                                     string username,
-                                     long chatId)
+                                     Group group,
+                                     Member member)
     {
         return new GroupMember
         {
             IsDeleted              = false,
-            Username               = username,
             AnabruhateCount        = 0,
-            ChatId                 = chatId,
-            LastAnabruhateDateTime = dateTime
+            LastAnabruhateDateTime = dateTime,
+            Group                  = group,
+            Member                 = member,
+            Pussy                  = GroupMemberPussy.Create(dateTime)
         };
     }
 
@@ -43,11 +46,6 @@ public class GroupMember : Entity
     public virtual void Anabruhate()
     {
         AnabruhateCount++;
-    }
-
-    public virtual void UpdateChatId(long chatId)
-    {
-        ChatId = chatId;
     }
 
     public virtual void IncreaseAnabruhateCount()

@@ -33,15 +33,6 @@ public sealed class TelegramCommandHandler
                     _logger.LogInformation("Начало обработки команды {TelegramCommand}",
                                            command.Command);
 
-                    if (command.IsEasterEgg)
-                    {
-                        var easterEggHandler = _lifetimeScope.Resolve<EasterEggHandler>();
-
-                        await easterEggHandler.HandleAsync(command, cancellationToken);
-
-                        return;
-                    }
-
                     if (!_lifetimeScope.TryResolveKeyed<ITelegramCommandHandler>(command.Command, out var handler))
                     {
                         _logger.LogWarning("Невозможно обработать команду {TelegramCommand}, не найден обработчик",
@@ -59,7 +50,7 @@ public sealed class TelegramCommandHandler
 
                 try
                 {
-                    await _telegramBotClient.SendTextMessageAsync(chatId: command.ChatId,
+                    await _telegramBotClient.SendTextMessageAsync(chatId: command.Message.Chat.Id,
                                                                   text: "Внутренняя ошибка системы",
                                                                   cancellationToken: cancellationToken);
                 }

@@ -14,16 +14,22 @@ public sealed class AnabruhateTelegramCommandHandler : ITelegramCommandHandler
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ITelegramBotClient _botClient;
     private readonly GroupMemberRepository _groupMemberRepository;
+    private readonly GroupRepository _groupRepository;
+    private readonly MemberRepository _memberRepository;
 
     public AnabruhateTelegramCommandHandler(ILogger<AnabruhateTelegramCommandHandler> logger,
                                             IDateTimeProvider dateTimeProvider,
                                             ITelegramBotClient botClient,
-                                            GroupMemberRepository groupMemberRepository)
+                                            GroupMemberRepository groupMemberRepository,
+                                            GroupRepository groupRepository,
+                                            MemberRepository memberRepository)
     {
         _logger                = logger;
         _dateTimeProvider      = dateTimeProvider;
         _botClient             = botClient;
         _groupMemberRepository = groupMemberRepository;
+        _groupRepository       = groupRepository;
+        _memberRepository      = memberRepository;
     }
 
     public async Task HandleAsync(TelegramCommand command, CancellationToken cancellationToken)
@@ -64,13 +70,18 @@ select t.id
 
         var randomMemberId = await connection.ExecuteScalarAsync<long>(commandDefinition);
 
-        var groupMember = await _groupMemberRepository.TryGetByChatIdAsync(message.From.Id, cancellationToken);
+        var chatId = command.Message.Chat.Id;
+
+        var group  = await _groupRepository.GetByChatIdAsync(chatId, cancellationToken);
+        var member = await _memberRepository.GetByChatIdAsync(chatId, cancellationToken);
+
+        var groupMember = await _groupMemberRepository.TryGetAsync(group.Id, member.Id, cancellationToken);
         if (groupMember is null)
         {
             _logger.LogWarning("Невозможно обработать команду {TelegramCommand}, участник не зарегистрирован",
                                command.Command);
 
-            await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+            await _botClient.SendTextMessageAsync(chatId: chatId,
                                                   text: $"Участник <i>{username}/{userId}</i> не зарегистрирован",
                                                   parseMode: ParseMode.Html,
                                                   cancellationToken: cancellationToken);
@@ -84,10 +95,10 @@ select t.id
 
         if (!groupMember.CanAnabruhate())
         {
-            var limitExceededMessageText = $"{groupMember.Username}, твой лимит анабрюхативаний исчерпан. " +
+            var limitExceededMessageText = $"{groupMember.Member.Username}, твой лимит анабрюхативаний исчерпан. " +
                                            $"Попробуй через {30 - diff.Minutes} мин";
 
-            await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+            await _botClient.SendTextMessageAsync(chatId: chatId,
                                                   text: limitExceededMessageText,
                                                   parseMode: ParseMode.Html,
                                                   cancellationToken: cancellationToken);
@@ -100,11 +111,11 @@ select t.id
         var randomMember = await _groupMemberRepository.GetAsync(randomMemberId, cancellationToken);
 
         _logger.LogInformation("Участник@{GroupMemberUsername}/{GroupMemberChatId} анабрюхатит @{RandomMemberUsername}",
-                               message.From?.Username ?? "NoUsername", message.From?.Id, randomMember.Username);
+                               message.From?.Username ?? "NoUsername", message.From?.Id, randomMember.Member.Username);
 
-        var messageText = $"{groupMember.Username} анабрюхатит: <i>{randomMember.Username}</i> пошел нахуй";
+        var messageText = $"{groupMember.Member.Username} анабрюхатит: <i>{randomMember.Member.Username}</i> пошел нахуй";
 
-        await _botClient.SendTextMessageAsync(chatId: command.ChatId,
+        await _botClient.SendTextMessageAsync(chatId: chatId,
                                               text: messageText,
                                               parseMode: ParseMode.Html,
                                               cancellationToken: cancellationToken);

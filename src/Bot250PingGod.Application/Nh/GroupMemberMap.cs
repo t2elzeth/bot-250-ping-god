@@ -1,4 +1,4 @@
-﻿using Bot250PingGod.Core.Abruhate;
+﻿using Bot250PingGod.Core.Group;
 using FluentNHibernate.Mapping;
 using Infrastructure.Application;
 using JetBrains.Annotations;
@@ -14,14 +14,18 @@ public sealed class GroupMemberMap : ClassMap<GroupMember>
 
         Id(x => x.Id);
 
-        Map(x => x.Username);
+        Map(x => x.IsDeleted);
 
         Map(x => x.AnabruhateCount);
-
-        Map(x => x.ChatId);
 
         Map(x => x.LastAnabruhateDateTime);
 
         Map(x => x.LastHourAnabruhateCount);
+
+        References(x => x.Group);
+
+        References(x => x.Member);
+
+        References(x => x.Pussy);
     }
 }
