@@ -31,7 +31,7 @@ select row_number() over (order by t.size desc) as row_number,
 
         var groupMembers = await connection.QueryAsync<GroupMemberRow>(sql, cancellationToken);
 
-        var groupMembersCountArray = groupMembers.Select(x => $"{x.RowNumber}. {x.Name} - {x.Size} см");
+        var groupMembersCountArray = groupMembers.Select(x => $"{x.RowNumber}. {x.Name} - {Math.Round(x.Size, 2)} см");
 
         var messageText = $"Статистика пусси: \n{string.Join('\n', groupMembersCountArray)}";
 
@@ -47,6 +47,6 @@ select row_number() over (order by t.size desc) as row_number,
 
         public string Name { get; init; } = null!;
 
-        public long Size { get; init; }
+        public decimal Size { get; init; }
     }
 }
