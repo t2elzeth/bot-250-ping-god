@@ -5,8 +5,6 @@ namespace Bot250PingGod.Core.Groups;
 
 public class GroupMember : Entity
 {
-    public virtual bool IsDeleted { get; protected init; }
-
     public virtual long AnabruhateCount { get; protected set; }
 
     public virtual UtcDateTime LastAnabruhateDateTime { get; protected set; } = null!;
@@ -29,7 +27,6 @@ public class GroupMember : Entity
     {
         return new GroupMember
         {
-            IsDeleted              = false,
             AnabruhateCount        = 0,
             LastAnabruhateDateTime = dateTime,
             Group                  = group,

@@ -14,8 +14,6 @@ public sealed class GroupMemberMap : ClassMap<GroupMember>
 
         Id(x => x.Id);
 
-        Map(x => x.IsDeleted);
-
         Map(x => x.AnabruhateCount);
 
         Map(x => x.LastAnabruhateDateTime);
