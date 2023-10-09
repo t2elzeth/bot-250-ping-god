@@ -2,7 +2,6 @@
 using Infrastructure.DataAccess;
 using Microsoft.Extensions.Logging;
 using NHibernate;
-using Telegram.Bot;
 
 namespace Bot250PingGod.Application.Commands;
 
@@ -15,15 +14,12 @@ public sealed class TelegramCommandHandler
 {
     private readonly ILogger<TelegramCommandHandler> _logger;
     private readonly ILifetimeScope _lifetimeScope;
-    private readonly ITelegramBotClient _telegramBotClient;
 
     public TelegramCommandHandler(ILogger<TelegramCommandHandler> logger,
-                                  ILifetimeScope lifetimeScope,
-                                  ITelegramBotClient telegramBotClient)
+                                  ILifetimeScope lifetimeScope)
     {
-        _logger            = logger;
-        _lifetimeScope     = lifetimeScope;
-        _telegramBotClient = telegramBotClient;
+        _logger        = logger;
+        _lifetimeScope = lifetimeScope;
     }
 
     public async Task HandleAsync(TelegramCommand command, CancellationToken cancellationToken)
@@ -52,17 +48,6 @@ public sealed class TelegramCommandHandler
             {
                 _logger.LogError(ex, "Произошла ошибка при обработке команды {TelegramCommand}",
                                  command.Command);
-
-                try
-                {
-                    await _telegramBotClient.SendTextMessageAsync(chatId: command.Message.Chat.Id,
-                                                                  text: "Внутренняя ошибка системы",
-                                                                  cancellationToken: cancellationToken);
-                }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, "Произошла ошибка при попытке отправить сообщение о внутренней ошибке системы");
-                }
             }
     }
 }

@@ -17,5 +17,7 @@ public sealed class GroupMemberPussyMap : ClassMap<GroupMemberPussy>
         Map(x => x.Size);
 
         Map(x => x.LastGrowDateTime);
+
+        Map(x => x.LastLimitNotificationDateTime);
     }
 }

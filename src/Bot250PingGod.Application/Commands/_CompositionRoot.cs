@@ -10,10 +10,10 @@ public class CompositionRoot : Module
     {
         builder.RegisterType<TelegramCommandHandler>().SingleInstance();
 
-        builder.RegisterType<PussyTelegramCommandHandler>()
+        builder.RegisterType<GrowPussyTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/growpussy");
 
-        builder.RegisterType<PussyTelegramCommandHandler>()
+        builder.RegisterType<GrowPussyTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/growpussy@t2_250_ping_god_bot");
         
         builder.RegisterType<PussyStatsTelegramCommandHandler>()

@@ -6,16 +6,16 @@ using Telegram.Bot.Types.Enums;
 
 namespace Bot250PingGod.Application.Commands;
 
-public sealed class PussyTelegramCommandHandler : ITelegramCommandHandler
+public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
 {
-    private readonly ILogger<PussyTelegramCommandHandler> _logger;
+    private readonly ILogger<GrowPussyTelegramCommandHandler> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ITelegramBotClient _botClient;
     private readonly GroupMemberRepository _groupMemberRepository;
     private readonly GroupRepository _groupRepository;
     private readonly MemberRepository _memberRepository;
 
-    public PussyTelegramCommandHandler(ILogger<PussyTelegramCommandHandler> logger,
+    public GrowPussyTelegramCommandHandler(ILogger<GrowPussyTelegramCommandHandler> logger,
                                        IDateTimeProvider dateTimeProvider,
                                        ITelegramBotClient botClient,
                                        GroupMemberRepository groupMemberRepository,
@@ -53,25 +53,38 @@ public sealed class PussyTelegramCommandHandler : ITelegramCommandHandler
         _logger.LogInformation("Member#{MemberId} in Group#{GroupId} with GroupMember#{GroupMemberId} wants to grow pussy",
                                member.Id, group.Id, groupMember.Id);
 
-        if (!groupMember.Pussy.CanGrowPussy(dateTime, out var tryAgainAfterMinutes))
+        var pussy = groupMember.Pussy;
+
+        if (!pussy.CanGrow(dateTime, out var tryAgainAfterMinutes))
         {
             _logger.LogInformation("GroupMember#{GroupMemberId} cannot grow pussy, LastPussyGrowDateTime is {LastPussyGrowDateTime}",
-                                   groupMember.Id, groupMember.Pussy.LastGrowDateTime);
+                                   groupMember.Id, pussy.LastGrowDateTime);
 
-            var limitExceededMessageText = $"{member.Username}, Попробуй через {tryAgainAfterMinutes} мин";
+            if (pussy.ShouldNotifyLimit(dateTime))
+            {
+                var limitExceededMessageText = $"{member.Username ?? member.FirstName}, Попробуй через {tryAgainAfterMinutes} мин";
 
-            await _botClient.SendTextMessageAsync(chatId: chatId,
-                                                  text: limitExceededMessageText,
-                                                  parseMode: ParseMode.Html,
-                                                  cancellationToken: cancellationToken);
+                await _botClient.SendTextMessageAsync(chatId: chatId,
+                                                      text: limitExceededMessageText,
+                                                      parseMode: ParseMode.Html,
+                                                      cancellationToken: cancellationToken);
+
+                pussy.NotifyLimit(dateTime);
+            }
+
+            await _botClient.DeleteMessageAsync(chatId: chatId,
+                                                messageId: message.MessageId,
+                                                cancellationToken: cancellationToken);
+
+            await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
 
             return;
         }
 
-        var growSize = groupMember.Pussy.GrowPussy(dateTime);
+        var growSize = pussy.Grow(dateTime);
 
-        var messageText = $"{message.From.Username ?? message.From.FirstName}, глубина твоей пусси увеличилась на {Math.Round(growSize, 2)} см. " +
-                          $"Теперь ее глубина: {groupMember.Pussy.Size} см";
+        var messageText = $"{message.From.Username ?? message.From.FirstName}, {Math.Round(growSize, 2)} см. к глубине твоей пусси. " +
+                          $"Теперь ее глубина: {pussy.Size} см";
 
         await _botClient.SendTextMessageAsync(chatId: chatId,
                                               text: messageText,

@@ -9,6 +9,8 @@ public class GroupMemberPussy : Entity
 
     public virtual UtcDateTime LastGrowDateTime { get; protected set; } = null!;
 
+    public virtual UtcDateTime? LastLimitNotificationDateTime { get; protected set; }
+
     protected GroupMemberPussy()
     {
     }
@@ -17,12 +19,13 @@ public class GroupMemberPussy : Entity
     {
         return new GroupMemberPussy
         {
-            Size             = 0,
-            LastGrowDateTime = dateTime - TimeSpan.FromHours(2)
+            Size                          = 0,
+            LastGrowDateTime              = dateTime - TimeSpan.FromHours(2),
+            LastLimitNotificationDateTime = null
         };
     }
 
-    public virtual bool CanGrowPussy(UtcDateTime dateTime, out long tryAgainAfterMinutes)
+    public virtual bool CanGrow(UtcDateTime dateTime, out long tryAgainAfterMinutes)
     {
         var diff = dateTime.Value - LastGrowDateTime.Value;
 
@@ -31,7 +34,22 @@ public class GroupMemberPussy : Entity
         return diff.TotalMinutes >= 30;
     }
 
-    public virtual decimal GrowPussy(UtcDateTime dateTime)
+    public virtual bool ShouldNotifyLimit(UtcDateTime dateTime)
+    {
+        if (LastLimitNotificationDateTime is null)
+            return true;
+
+        var lastLimitNotificationDiff = dateTime.Value - LastLimitNotificationDateTime.Value;
+
+        return lastLimitNotificationDiff.TotalMinutes >= 10;
+    }
+
+    public virtual void NotifyLimit(UtcDateTime dateTime)
+    {
+        LastLimitNotificationDateTime = dateTime;
+    }
+
+    public virtual decimal Grow(UtcDateTime dateTime)
     {
         const decimal minGrowSize = -10m; // Minimum value of the range
         const decimal maxGrowSize = 10m;  // Maximum value of the range
@@ -39,8 +57,9 @@ public class GroupMemberPussy : Entity
         var random   = new Random();
         var growSize = (decimal)random.NextDouble() * (maxGrowSize - minGrowSize) + minGrowSize;
 
-        Size             = Math.Round(Size + growSize, 2);
-        LastGrowDateTime = dateTime;
+        Size                          = Math.Round(Size + growSize, 2);
+        LastGrowDateTime              = dateTime;
+        LastLimitNotificationDateTime = null;
 
         return growSize;
     }
