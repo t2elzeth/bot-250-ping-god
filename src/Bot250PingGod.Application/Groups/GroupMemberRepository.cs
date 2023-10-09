@@ -1,8 +1,8 @@
-﻿using Bot250PingGod.Core.Group;
+﻿using Bot250PingGod.Core.Groups;
 using Infrastructure.DataAccess;
 using NHibernate.Linq;
 
-namespace Bot250PingGod.Application.Rooms;
+namespace Bot250PingGod.Application.Groups;
 
 public class GroupMemberRepository
 {

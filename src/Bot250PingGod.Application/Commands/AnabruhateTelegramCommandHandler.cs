@@ -1,4 +1,4 @@
-﻿using Bot250PingGod.Application.Rooms;
+﻿using Bot250PingGod.Application.Groups;
 using Dapper;
 using Infrastructure.DataAccess;
 using Infrastructure.Seedwork.Providers;

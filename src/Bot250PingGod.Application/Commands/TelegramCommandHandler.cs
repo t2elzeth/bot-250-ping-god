@@ -6,6 +6,11 @@ using Telegram.Bot;
 
 namespace Bot250PingGod.Application.Commands;
 
+public interface ITelegramCommandHandler
+{
+    public Task HandleAsync(TelegramCommand command, CancellationToken cancellationToken);
+}
+
 public sealed class TelegramCommandHandler
 {
     private readonly ILogger<TelegramCommandHandler> _logger;

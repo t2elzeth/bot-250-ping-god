@@ -1,6 +1,6 @@
 ﻿using Bot250PingGod.Application.Commands;
-using Bot250PingGod.Application.Rooms;
-using Bot250PingGod.Core.Group;
+using Bot250PingGod.Application.Groups;
+using Bot250PingGod.Core.Groups;
 using Infrastructure.DataAccess;
 using Infrastructure.Seedwork.Providers;
 using Microsoft.Extensions.Logging;

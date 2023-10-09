@@ -1,4 +1,4 @@
-﻿using Bot250PingGod.Application.Rooms;
+﻿using Bot250PingGod.Application.Groups;
 using Infrastructure.Seedwork.Providers;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;

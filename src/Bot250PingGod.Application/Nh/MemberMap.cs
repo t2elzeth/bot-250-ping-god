@@ -1,4 +1,4 @@
-﻿using Bot250PingGod.Core.Group;
+﻿using Bot250PingGod.Core.Groups;
 using FluentNHibernate.Mapping;
 using Infrastructure.Application;
 using JetBrains.Annotations;

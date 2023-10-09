@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Infrastructure.Seedwork.DataTypes;
 
-namespace Bot250PingGod.Core.Group;
+namespace Bot250PingGod.Core.Groups;
 
 public class GroupMemberPussy : Entity
 {

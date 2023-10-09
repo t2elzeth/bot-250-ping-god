@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Bot250PingGod.Core.Group;
+namespace Bot250PingGod.Core.Groups;
 
 public class Member : Entity
 {
