@@ -49,11 +49,10 @@ public class GroupMemberPussy : Entity
         LastLimitNotificationDateTime = dateTime;
     }
 
-    public virtual decimal Grow(UtcDateTime dateTime)
+    public virtual decimal Grow(UtcDateTime dateTime,
+                                decimal minGrowSize,
+                                decimal maxGrowSize)
     {
-        const decimal minGrowSize = -10m; // Minimum value of the range
-        const decimal maxGrowSize = 10m;  // Maximum value of the range
-
         var random   = new Random();
         var growSize = (decimal)random.NextDouble() * (maxGrowSize - minGrowSize) + minGrowSize;
 

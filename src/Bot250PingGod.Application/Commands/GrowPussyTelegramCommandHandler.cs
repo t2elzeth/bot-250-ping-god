@@ -16,11 +16,11 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
     private readonly MemberRepository _memberRepository;
 
     public GrowPussyTelegramCommandHandler(ILogger<GrowPussyTelegramCommandHandler> logger,
-                                       IDateTimeProvider dateTimeProvider,
-                                       ITelegramBotClient botClient,
-                                       GroupMemberRepository groupMemberRepository,
-                                       GroupRepository groupRepository,
-                                       MemberRepository memberRepository)
+                                           IDateTimeProvider dateTimeProvider,
+                                           ITelegramBotClient botClient,
+                                           GroupMemberRepository groupMemberRepository,
+                                           GroupRepository groupRepository,
+                                           MemberRepository memberRepository)
     {
         _logger                = logger;
         _dateTimeProvider      = dateTimeProvider;
@@ -45,7 +45,16 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
 
         var chatId = command.Message.Chat.Id;
 
-        var group  = await _groupRepository.GetByChatIdAsync(chatId, cancellationToken);
+        var group         = await _groupRepository.GetByChatIdAsync(chatId, cancellationToken);
+        var configuration = group.Configuration;
+
+        if (!configuration.AllowGrowPussyCommand)
+        {
+            _logger.LogWarning("Cannot handle grow pussy command, this command is disabled for Group#{ChatId}",
+                               message.Chat.Id);
+            return;
+        }
+
         var member = await _memberRepository.GetByChatIdAsync(message.From.Id, cancellationToken);
 
         var groupMember = await _groupMemberRepository.GetAsync(group.Id, member.Id, cancellationToken);
@@ -81,7 +90,9 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
             return;
         }
 
-        var growSize = pussy.Grow(dateTime);
+        var growSize = pussy.Grow(dateTime: dateTime,
+                                  minGrowSize: configuration.GrowPussyMinSize,
+                                  maxGrowSize: configuration.GrowPussyMaxSize);
 
         var messageText = $"{message.From.Username ?? message.From.FirstName}, {Math.Round(growSize, 2)} см. к глубине твоей пусси. " +
                           $"Теперь ее глубина: {pussy.Size} см";

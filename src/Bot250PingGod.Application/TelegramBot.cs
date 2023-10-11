@@ -119,7 +119,8 @@ public sealed class TelegramBot
             if (group is null)
             {
                 group = Group.Create(title: message.Chat.Title,
-                                     chatId: message.Chat.Id);
+                                     chatId: message.Chat.Id,
+                                     configuration: GroupConfiguration.CreateDefault());
 
                 await _groupRepository.SaveAsync(group, cancellationToken);
             }
