@@ -5,11 +5,11 @@ using Telegram.Bot;
 
 namespace Bot250PingGod.Application.Commands;
 
-public sealed class PussyStatsTelegramCommandHandler : ITelegramCommandHandler
+public sealed class GrowPussyStatsTelegramCommandHandler : ITelegramCommandHandler
 {
     private readonly ITelegramBotClient _botClient;
 
-    public PussyStatsTelegramCommandHandler(ITelegramBotClient botClient)
+    public GrowPussyStatsTelegramCommandHandler(ITelegramBotClient botClient)
     {
         _botClient = botClient;
     }
@@ -23,13 +23,21 @@ select row_number() over (order by t.size desc) as row_number,
        t.size
   from bot.group_member_pussies t
   inner join bot.group_members gm on gm.pussy_id = t.id
-  inner join bot.members m on m.id = gm.member_id;
+  inner join bot.groups g on g.id = gm.group_id
+  inner join bot.members m on m.id = gm.member_id
+ where g.chat_id = :groupId;
 ";
 
         var dbSession  = DbSession.Current;
         var connection = dbSession.Connection;
 
-        var groupMembers = await connection.QueryAsync<GroupMemberRow>(sql, cancellationToken);
+        var parameters = new
+        {
+            groupId = command.Message.Chat.Id
+        };
+
+        var commandDefinition = new CommandDefinition(sql, parameters, cancellationToken: cancellationToken);
+        var groupMembers      = await connection.QueryAsync<GroupMemberRow>(commandDefinition);
 
         var groupMembersCountArray = groupMembers.Select(x => $"{x.RowNumber}. {x.Name} - {Math.Round(x.Size, 2)} см");
 

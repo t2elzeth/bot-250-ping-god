@@ -16,10 +16,10 @@ public class CompositionRoot : Module
         builder.RegisterType<GrowPussyTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/growpussy@t2_250_ping_god_bot");
         
-        builder.RegisterType<PussyStatsTelegramCommandHandler>()
+        builder.RegisterType<GrowPussyStatsTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/statsgrowpussy");
 
-        builder.RegisterType<PussyStatsTelegramCommandHandler>()
+        builder.RegisterType<GrowPussyStatsTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/statsgrowpussy@t2_250_ping_god_bot");
     }
 }
