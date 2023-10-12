@@ -29,9 +29,9 @@ public class GroupMemberPussy : Entity
     {
         var diff = dateTime.Value - LastGrowDateTime.Value;
 
-        tryAgainAfterMinutes = 30 - diff.Minutes;
+        tryAgainAfterMinutes = 15 - diff.Minutes;
 
-        return diff.TotalMinutes >= 30;
+        return diff.TotalMinutes >= 15;
     }
 
     public virtual bool ShouldNotifyLimit(UtcDateTime dateTime)
