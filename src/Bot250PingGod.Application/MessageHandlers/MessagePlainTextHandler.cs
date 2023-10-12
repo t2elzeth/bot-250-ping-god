@@ -7,6 +7,14 @@ public sealed class MessagePlainTextHandler
 {
     private readonly ITelegramBotClient _botClient;
 
+    private readonly Dictionary<string, string> _messageAnswers = new()
+    {
+        { "да", "пизда" },
+        { "нет", "пидора ответ" },
+        { "че", "хуй через плечо" },
+        { "че?", "хуй через плечо" },
+    };
+
     public MessagePlainTextHandler(ITelegramBotClient botClient)
     {
         _botClient = botClient;
@@ -20,28 +28,12 @@ public sealed class MessagePlainTextHandler
         if (messageText is null)
             return;
 
-        switch (messageText.ToLower())
+        if (_messageAnswers.TryGetValue(messageText, out var answerText))
         {
-            case "да":
-            {
-                await _botClient.SendTextMessageAsync(chatId: chatId,
-                                                      text: "Пизда",
-                                                      replyToMessageId: message.MessageId,
-                                                      cancellationToken: cancellationToken);
-                return;
-            }
-
-            case "нет":
-            {
-                await _botClient.SendTextMessageAsync(chatId: chatId,
-                                                      text: "Пидора ответ",
-                                                      replyToMessageId: message.MessageId,
-                                                      cancellationToken: cancellationToken);
-                return;
-            }
-
-            default:
-                return;
+            await _botClient.SendTextMessageAsync(chatId: chatId,
+                                                  text: answerText,
+                                                  replyToMessageId: message.MessageId,
+                                                  cancellationToken: cancellationToken);
         }
     }
 }
