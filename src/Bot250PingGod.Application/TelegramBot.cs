@@ -1,10 +1,6 @@
 ﻿using Bot250PingGod.Application.Commands;
-using Bot250PingGod.Application.Groups;
-using Bot250PingGod.Core.Groups;
-using Infrastructure.DataAccess;
-using Infrastructure.Seedwork.Providers;
+using Bot250PingGod.Application.MessageHandlers;
 using Microsoft.Extensions.Logging;
-using NHibernate;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -17,30 +13,18 @@ public sealed class TelegramBot
 {
     private readonly ILogger<TelegramBot> _logger;
     private readonly ITelegramBotClient _botClient;
-    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly TelegramCommandHandler _telegramCommandHandler;
-    private readonly GroupMemberRepository _groupMemberRepository;
-    private readonly ISessionFactory _sessionFactory;
-    private readonly GroupRepository _groupRepository;
-    private readonly MemberRepository _memberRepository;
+    private readonly MessagePlainTextHandler _messagePlainTextHandler;
 
     public TelegramBot(ILogger<TelegramBot> logger,
                        ITelegramBotClient botClient,
-                       IDateTimeProvider dateTimeProvider,
                        TelegramCommandHandler telegramCommandHandler,
-                       GroupMemberRepository groupMemberRepository,
-                       ISessionFactory sessionFactory,
-                       GroupRepository groupRepository,
-                       MemberRepository memberRepository)
+                       MessagePlainTextHandler messagePlainTextHandler)
     {
-        _logger                 = logger;
-        _botClient              = botClient;
-        _dateTimeProvider       = dateTimeProvider;
-        _telegramCommandHandler = telegramCommandHandler;
-        _groupMemberRepository  = groupMemberRepository;
-        _sessionFactory         = sessionFactory;
-        _groupRepository        = groupRepository;
-        _memberRepository       = memberRepository;
+        _logger                  = logger;
+        _botClient               = botClient;
+        _telegramCommandHandler  = telegramCommandHandler;
+        _messagePlainTextHandler = messagePlainTextHandler;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken)
@@ -84,8 +68,6 @@ public sealed class TelegramBot
                                          Update update,
                                          CancellationToken cancellationToken)
     {
-        var dateTime = _dateTimeProvider.Now();
-
         if (update.Message is not { } message)
             return;
 
@@ -111,47 +93,12 @@ public sealed class TelegramBot
         _logger.LogInformation("Received a '{MessageText}' message in chat {ChatId}",
                                messageText, chatId);
 
-        await using (DbSession.Bind(_sessionFactory))
-        {
-            await using var dbTransaction = new DbTransaction();
-
-            var group = await _groupRepository.TryGetByChatIdAsync(message.Chat.Id, cancellationToken);
-            if (group is null)
-            {
-                group = Group.Create(title: message.Chat.Title,
-                                     chatId: message.Chat.Id,
-                                     configuration: GroupConfiguration.CreateDefault());
-
-                await _groupRepository.SaveAsync(group, cancellationToken);
-            }
-
-            var member = await _memberRepository.TryGetByChatIdAsync(message.From.Id, cancellationToken);
-            if (member is null)
-            {
-                member = Member.Create(username: message.From.Username,
-                                       firstName: message.From.FirstName,
-                                       lastName: message.From.LastName,
-                                       userId: message.From.Id);
-
-                await _memberRepository.SaveAsync(member, cancellationToken);
-            }
-
-            var groupMember = await _groupMemberRepository.TryGetAsync(group.Id, member.Id, cancellationToken);
-            if (groupMember is null)
-            {
-                groupMember = GroupMember.Create(dateTime: dateTime,
-                                                 group: group,
-                                                 member: member);
-
-                await _groupMemberRepository.SaveAsync(groupMember, cancellationToken);
-            }
-
-            await dbTransaction.CommitAsync();
-        }
-
         if (TelegramCommand.TryCreate(message, out var command))
         {
             await _telegramCommandHandler.HandleAsync(command, cancellationToken);
+            return;
         }
+
+        await _messagePlainTextHandler.HandleAsync(message, cancellationToken);
     }
 }
