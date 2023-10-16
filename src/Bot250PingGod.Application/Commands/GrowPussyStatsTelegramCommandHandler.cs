@@ -18,7 +18,7 @@ public sealed class GrowPussyStatsTelegramCommandHandler : ITelegramCommandHandl
     {
         //language=sql
         const string sql = @"
-select row_number() over (order by t.size desc) as row_number,
+select row_number() over (order by t.size asc) as row_number,
        coalesce(m.username, m.first_name) as name,
        t.size
   from bot.group_member_pussies t
