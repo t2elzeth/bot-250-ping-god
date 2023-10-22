@@ -28,7 +28,7 @@ public sealed class MessagePlainTextHandler
         if (messageText is null)
             return;
 
-        if (_messageAnswers.TryGetValue(messageText, out var answerText))
+        if (_messageAnswers.TryGetValue(messageText.ToLower(), out var answerText))
         {
             await _botClient.SendTextMessageAsync(chatId: chatId,
                                                   text: answerText,
