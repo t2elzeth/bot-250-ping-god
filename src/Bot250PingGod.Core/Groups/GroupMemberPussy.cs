@@ -41,7 +41,7 @@ public class GroupMemberPussy : Entity
 
         var lastLimitNotificationDiff = dateTime.Value - LastLimitNotificationDateTime.Value;
 
-        return lastLimitNotificationDiff.TotalMinutes >= 10;
+        return lastLimitNotificationDiff.TotalMinutes >= 3;
     }
 
     public virtual void NotifyLimit(UtcDateTime dateTime)
