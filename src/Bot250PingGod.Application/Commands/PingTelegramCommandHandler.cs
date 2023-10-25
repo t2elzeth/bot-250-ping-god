@@ -92,8 +92,8 @@ public sealed class PingTelegramCommandHandler : ITelegramCommandHandler
 
         var growSize = groupMember.DoPing(dateTime: dateTime);
 
-        var messageText = $"{message.From.Username ?? message.From.FirstName}, {Math.Round(growSize, 2)} к твоему пингу. " +
-                          $"Теперь твой пинг: {ping.Ping}";
+        var messageText = $"{message.From.Username ?? message.From.FirstName}, {Math.Round(growSize, 2)} мс к твоему пингу. " +
+                          $"Теперь твой пинг: {ping.Ping} мс";
 
         await _botClient.SendTextMessageAsync(chatId: chatId,
                                               text: messageText,
