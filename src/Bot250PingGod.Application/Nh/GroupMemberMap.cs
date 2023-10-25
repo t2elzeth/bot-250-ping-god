@@ -25,5 +25,7 @@ public sealed class GroupMemberMap : ClassMap<GroupMember>
         References(x => x.Member);
 
         References(x => x.Pussy);
+
+        References(x => x.Ping);
     }
 }

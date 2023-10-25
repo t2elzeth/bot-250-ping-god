@@ -6,6 +6,8 @@ public class GroupConfiguration
 {
     public virtual required bool AllowGrowPussyCommand { get; init; }
 
+    public virtual required bool AllowPingCommand { get; init; }
+
     public virtual required decimal GrowPussyMinSize { get; init; }
 
     public virtual required decimal GrowPussyMaxSize { get; init; }
@@ -15,6 +17,7 @@ public class GroupConfiguration
         return new GroupConfiguration
         {
             AllowGrowPussyCommand = true,
+            AllowPingCommand      = true,
             GrowPussyMinSize      = -10,
             GrowPussyMaxSize      = 10
         };

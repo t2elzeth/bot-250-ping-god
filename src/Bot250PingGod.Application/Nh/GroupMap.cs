@@ -12,6 +12,8 @@ public sealed class GroupConfigurationMap : ComponentMap<GroupConfiguration>
     {
         Map(x => x.AllowGrowPussyCommand);
 
+        Map(x => x.AllowPingCommand);
+
         Map(x => x.GrowPussyMinSize);
 
         Map(x => x.GrowPussyMaxSize);

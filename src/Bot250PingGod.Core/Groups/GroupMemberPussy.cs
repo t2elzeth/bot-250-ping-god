@@ -5,11 +5,11 @@ namespace Bot250PingGod.Core.Groups;
 
 public class GroupMemberPussy : Entity
 {
-    public virtual decimal Size { get; protected set; }
+    public virtual decimal Size { get; protected internal set; }
 
-    public virtual UtcDateTime LastGrowDateTime { get; protected set; } = null!;
+    public virtual UtcDateTime LastGrowDateTime { get; protected internal set; } = null!;
 
-    public virtual UtcDateTime? LastLimitNotificationDateTime { get; protected set; }
+    public virtual UtcDateTime? LastLimitNotificationDateTime { get; protected internal set; }
 
     protected GroupMemberPussy()
     {
@@ -23,43 +23,5 @@ public class GroupMemberPussy : Entity
             LastGrowDateTime              = dateTime - TimeSpan.FromHours(2),
             LastLimitNotificationDateTime = null
         };
-    }
-
-    public virtual bool CanGrow(UtcDateTime dateTime, out long tryAgainAfterMinutes)
-    {
-        var diff = dateTime.Value - LastGrowDateTime.Value;
-
-        tryAgainAfterMinutes = 15 - diff.Minutes;
-
-        return diff.TotalMinutes >= 15;
-    }
-
-    public virtual bool ShouldNotifyLimit(UtcDateTime dateTime)
-    {
-        if (LastLimitNotificationDateTime is null)
-            return true;
-
-        var lastLimitNotificationDiff = dateTime.Value - LastLimitNotificationDateTime.Value;
-
-        return lastLimitNotificationDiff.TotalMinutes >= 3;
-    }
-
-    public virtual void NotifyLimit(UtcDateTime dateTime)
-    {
-        LastLimitNotificationDateTime = dateTime;
-    }
-
-    public virtual decimal Grow(UtcDateTime dateTime,
-                                decimal minGrowSize,
-                                decimal maxGrowSize)
-    {
-        var random   = new Random();
-        var growSize = (decimal)random.NextDouble() * (maxGrowSize - minGrowSize) + minGrowSize;
-
-        Size                          = Math.Round(Size + growSize, 2);
-        LastGrowDateTime              = dateTime;
-        LastLimitNotificationDateTime = null;
-
-        return growSize;
     }
 }

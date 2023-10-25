@@ -6,21 +6,21 @@ using Telegram.Bot.Types.Enums;
 
 namespace Bot250PingGod.Application.Commands;
 
-public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
+public sealed class PingTelegramCommandHandler : ITelegramCommandHandler
 {
-    private readonly ILogger<GrowPussyTelegramCommandHandler> _logger;
+    private readonly ILogger<PingTelegramCommandHandler> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ITelegramBotClient _botClient;
     private readonly GroupMemberRepository _groupMemberRepository;
     private readonly GroupRepository _groupRepository;
     private readonly MemberRepository _memberRepository;
 
-    public GrowPussyTelegramCommandHandler(ILogger<GrowPussyTelegramCommandHandler> logger,
-                                           IDateTimeProvider dateTimeProvider,
-                                           ITelegramBotClient botClient,
-                                           GroupMemberRepository groupMemberRepository,
-                                           GroupRepository groupRepository,
-                                           MemberRepository memberRepository)
+    public PingTelegramCommandHandler(ILogger<PingTelegramCommandHandler> logger,
+                                      IDateTimeProvider dateTimeProvider,
+                                      ITelegramBotClient botClient,
+                                      GroupMemberRepository groupMemberRepository,
+                                      GroupRepository groupRepository,
+                                      MemberRepository memberRepository)
     {
         _logger                = logger;
         _dateTimeProvider      = dateTimeProvider;
@@ -48,9 +48,9 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
         var group         = await _groupRepository.GetByChatIdAsync(chatId, cancellationToken);
         var configuration = group.Configuration;
 
-        if (!configuration.AllowGrowPussyCommand)
+        if (!configuration.AllowPingCommand)
         {
-            _logger.LogWarning("Cannot handle grow pussy command, this command is disabled for Group#{ChatId}",
+            _logger.LogWarning("Cannot handle ping command, this command is disabled for Group#{ChatId}",
                                message.Chat.Id);
             return;
         }
@@ -59,17 +59,17 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
 
         var groupMember = await _groupMemberRepository.GetAsync(group.Id, member.Id, cancellationToken);
 
-        _logger.LogInformation("Member#{MemberId} in Group#{GroupId} with GroupMember#{GroupMemberId} wants to grow pussy",
+        _logger.LogInformation("Member#{MemberId} in Group#{GroupId} with GroupMember#{GroupMemberId} wants to ping",
                                member.Id, group.Id, groupMember.Id);
 
-        var pussy = groupMember.Pussy;
+        var ping = groupMember.GetPing(dateTime);
 
-        if (!groupMember.CanGrowPussy(dateTime, out var tryAgainAfterMinutes))
+        if (!groupMember.CanPing(dateTime, out var tryAgainAfterMinutes))
         {
-            _logger.LogInformation("GroupMember#{GroupMemberId} cannot grow pussy, LastPussyGrowDateTime is {LastPussyGrowDateTime}",
-                                   groupMember.Id, pussy.LastGrowDateTime);
+            _logger.LogInformation("GroupMember#{GroupMemberId} cannot ping, LastPingDateTime is {LastPingDateTime}",
+                                   groupMember.Id, ping.LastPingDateTime);
 
-            if (groupMember.ShouldNotifyPussyLimit(dateTime))
+            if (groupMember.ShouldNotifyPingLimit(dateTime))
             {
                 var limitExceededMessageText = $"{member.Username ?? member.FirstName}, Попробуй через {tryAgainAfterMinutes} мин";
 
@@ -78,7 +78,7 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
                                                       parseMode: ParseMode.Html,
                                                       cancellationToken: cancellationToken);
 
-                groupMember.NotifyPussyLimit(dateTime);
+                groupMember.NotifyPingLimit(dateTime);
             }
 
             await _botClient.DeleteMessageAsync(chatId: chatId,
@@ -90,10 +90,10 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
             return;
         }
 
-        var growSize = groupMember.GrowPussy(dateTime: dateTime);
+        var growSize = groupMember.DoPing(dateTime: dateTime);
 
-        var messageText = $"{message.From.Username ?? message.From.FirstName}, {Math.Round(growSize, 2)} см. к глубине твоей пусси. " +
-                          $"Теперь ее глубина: {pussy.Size} см";
+        var messageText = $"{message.From.Username ?? message.From.FirstName}, {Math.Round(growSize, 2)} к твоему пингу. " +
+                          $"Теперь твой пинг: {ping.Ping}";
 
         await _botClient.SendTextMessageAsync(chatId: chatId,
                                               text: messageText,
