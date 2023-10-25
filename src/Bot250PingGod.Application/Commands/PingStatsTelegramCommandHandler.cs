@@ -28,7 +28,7 @@ select row_number() over (order by t.ping desc) as row_number,
        coalesce(m.username, m.first_name) as name,
        t.ping
   from bot.group_member_pings t
-  inner join bot.group_members gm on gm.pussy_id = t.id
+  inner join bot.group_members gm on gm.ping_id = t.id
   inner join bot.groups g on g.id = gm.group_id
   inner join bot.members m on m.id = gm.member_id
  where g.chat_id = :groupId
