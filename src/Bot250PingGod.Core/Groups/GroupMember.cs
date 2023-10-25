@@ -108,9 +108,9 @@ public class GroupMember : Entity
 
         var diff = dateTime.Value - Ping.LastPingDateTime.Value;
 
-        tryAgainAfterMinutes = 10 - diff.Minutes;
+        tryAgainAfterMinutes = 3 - diff.Minutes;
 
-        return diff.TotalMinutes >= 10;
+        return diff.TotalMinutes >= 3;
     }
 
     public virtual bool ShouldNotifyPingLimit(UtcDateTime dateTime)
@@ -122,7 +122,7 @@ public class GroupMember : Entity
 
         var lastLimitNotificationDiff = dateTime.Value - Ping.LastLimitNotificationDateTime.Value;
 
-        return lastLimitNotificationDiff.TotalMinutes >= 3;
+        return lastLimitNotificationDiff.TotalMinutes >= 1;
     }
 
     public virtual void NotifyPingLimit(UtcDateTime dateTime)
