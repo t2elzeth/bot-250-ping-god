@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Bot250PingGod.Application.MessageHandlers;
+namespace Bot250PingGod.MessageHandlers;
 
 public sealed class MessagePlainTextHandler
 {

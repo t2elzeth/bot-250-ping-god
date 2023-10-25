@@ -1,5 +1,5 @@
-﻿using Bot250PingGod.Application.Commands;
-using Bot250PingGod.Application.MessageHandlers;
+﻿using Bot250PingGod.Commands;
+using Bot250PingGod.MessageHandlers;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -7,7 +7,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Bot250PingGod.Application;
+namespace Bot250PingGod;
 
 public sealed class TelegramBot
 {

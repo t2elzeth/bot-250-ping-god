@@ -2,7 +2,7 @@
 using Infrastructure.DataAccess;
 using NHibernate.Linq;
 
-namespace Bot250PingGod.Application.Groups;
+namespace Bot250PingGod.Groups;
 
 public class GroupMemberRepository
 {

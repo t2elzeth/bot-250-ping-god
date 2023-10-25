@@ -1,4 +1,4 @@
-﻿using Bot250PingGod.Application.Groups;
+﻿using Bot250PingGod.Groups;
 using Dapper;
 using Infrastructure.DataAccess;
 using Infrastructure.Seedwork.Providers;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 
-namespace Bot250PingGod.Application.Commands;
+namespace Bot250PingGod.Commands;
 
 public sealed class AnabruhateTelegramCommandHandler : ITelegramCommandHandler
 {

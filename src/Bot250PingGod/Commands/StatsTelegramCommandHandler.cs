@@ -3,7 +3,7 @@ using Infrastructure.DataAccess;
 using JetBrains.Annotations;
 using Telegram.Bot;
 
-namespace Bot250PingGod.Application.Commands;
+namespace Bot250PingGod.Commands;
 
 public sealed class StatsTelegramCommandHandler : ITelegramCommandHandler
 {

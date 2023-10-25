@@ -3,7 +3,7 @@ using FluentNHibernate.Mapping;
 using Infrastructure.Application;
 using JetBrains.Annotations;
 
-namespace Bot250PingGod.Application.Nh;
+namespace Bot250PingGod.Nh;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public sealed class GroupConfigurationMap : ComponentMap<GroupConfiguration>

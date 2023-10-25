@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using JetBrains.Annotations;
 
-namespace Bot250PingGod.Application.Commands;
+namespace Bot250PingGod.Commands;
 
 [UsedImplicitly]
 public class CompositionRoot : Module

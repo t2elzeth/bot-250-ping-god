@@ -3,23 +3,21 @@ using FluentNHibernate.Mapping;
 using Infrastructure.Application;
 using JetBrains.Annotations;
 
-namespace Bot250PingGod.Application.Nh;
+namespace Bot250PingGod.Nh;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public sealed class MemberMap : ClassMap<Member>
+public sealed class GroupMemberPussyMap : ClassMap<GroupMemberPussy>
 {
-    public MemberMap()
+    public GroupMemberPussyMap()
     {
         Schema(DatabaseSchemas.Bot);
 
         Id(x => x.Id);
 
-        Map(x => x.Username);
+        Map(x => x.Size);
 
-        Map(x => x.FirstName);
+        Map(x => x.LastGrowDateTime);
 
-        Map(x => x.LastName);
-
-        Map(x => x.UserId);
+        Map(x => x.LastLimitNotificationDateTime);
     }
 }

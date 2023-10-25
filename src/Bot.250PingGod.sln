@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot250PingGod", "Bot250PingGod\Bot250PingGod.csproj", "{B92BD2DD-F600-4957-93D9-3D4FB93973B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot250PingGod.Application", "Bot250PingGod.Application\Bot250PingGod.Application.csproj", "{BE039A4C-350C-4EDD-A330-879DEACC3912}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot250PingGod.Core", "Bot250PingGod.Core\Bot250PingGod.Core.csproj", "{4F8512F2-0D55-47D3-8DE8-5745CB081C3B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{B3703551-8260-40BA-BA42-20D65318FF44}"
@@ -32,10 +30,6 @@ Global
 		{B92BD2DD-F600-4957-93D9-3D4FB93973B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B92BD2DD-F600-4957-93D9-3D4FB93973B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B92BD2DD-F600-4957-93D9-3D4FB93973B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE039A4C-350C-4EDD-A330-879DEACC3912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE039A4C-350C-4EDD-A330-879DEACC3912}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE039A4C-350C-4EDD-A330-879DEACC3912}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE039A4C-350C-4EDD-A330-879DEACC3912}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F8512F2-0D55-47D3-8DE8-5745CB081C3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F8512F2-0D55-47D3-8DE8-5745CB081C3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F8512F2-0D55-47D3-8DE8-5745CB081C3B}.Release|Any CPU.ActiveCfg = Release|Any CPU

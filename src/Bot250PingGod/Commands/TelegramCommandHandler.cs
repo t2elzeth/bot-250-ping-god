@@ -1,12 +1,12 @@
 ﻿using Autofac;
-using Bot250PingGod.Application.Groups;
 using Bot250PingGod.Core.Groups;
+using Bot250PingGod.Groups;
 using Infrastructure.DataAccess;
 using Infrastructure.Seedwork.Providers;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 
-namespace Bot250PingGod.Application.Commands;
+namespace Bot250PingGod.Commands;
 
 public interface ITelegramCommandHandler
 {

@@ -10,7 +10,7 @@ public static class NhSessionFactory
     static NhSessionFactory()
     {
         Instance = new SessionFactoryBuilder()
-                   .AddFluentMappingsFrom("Bot250PingGod.Application")
+                   .AddFluentMappingsFrom("Bot250PingGod")
                    .Build();
     }
 }

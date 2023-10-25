@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using Telegram.Bot.Types;
 
-namespace Bot250PingGod.Application;
+namespace Bot250PingGod;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class TelegramMessage

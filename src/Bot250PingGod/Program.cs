@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Bot250PingGod.Application;
 using Infrastructure.DataAccess;
 using Infrastructure.Seedwork.Providers;
 using Microsoft.Extensions.Configuration;
@@ -49,10 +48,13 @@ public static class Program
         var builder = new ContainerBuilder();
         builder.Populate(services);
 
-        builder.RegisterAssemblyModules(Assembly.Load("Bot250PingGod.Application"));
-
         builder.RegisterInstance(botClient).As<ITelegramBotClient>();
         builder.RegisterInstance(NhSessionFactory.Instance);
+
+        builder.RegisterType<TelegramBot>().SingleInstance();
+
+        builder.RegisterAssemblyModules(Assembly.GetExecutingAssembly());
+        builder.RegisterAssemblyModules(Assembly.Load("Infrastructure.SeedWork"));
 
         builder.RegisterInstance(new SystemEnvironmentConfiguration
         {
