@@ -5,11 +5,11 @@ using Telegram.Bot;
 
 namespace Bot250PingGod.Commands;
 
-public sealed class StatsTelegramCommandHandler : ITelegramCommandHandler
+public sealed class StatsAnabruhateTelegramCommandHandler : ITelegramCommandHandler
 {
     private readonly ITelegramBotClient _botClient;
 
-    public StatsTelegramCommandHandler(ITelegramBotClient botClient)
+    public StatsAnabruhateTelegramCommandHandler(ITelegramBotClient botClient)
     {
         _botClient = botClient;
     }

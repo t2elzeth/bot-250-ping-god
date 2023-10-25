@@ -20,14 +20,14 @@ public class CompositionRoot : Module
         builder.RegisterType<PingTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/ping@t2_250_ping_god_bot");
 
-        builder.RegisterType<GrowPussyStatsTelegramCommandHandler>()
+        builder.RegisterType<StatsGrowPussyTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/statsgrowpussy");
-        builder.RegisterType<GrowPussyStatsTelegramCommandHandler>()
+        builder.RegisterType<StatsGrowPussyTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/statsgrowpussy@t2_250_ping_god_bot");
 
-        builder.RegisterType<PingStatsTelegramCommandHandler>()
+        builder.RegisterType<StatsPingTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/statsping");
-        builder.RegisterType<PingStatsTelegramCommandHandler>()
+        builder.RegisterType<StatsPingTelegramCommandHandler>()
                .Keyed<ITelegramCommandHandler>("/statsping@t2_250_ping_god_bot");
     }
 }
