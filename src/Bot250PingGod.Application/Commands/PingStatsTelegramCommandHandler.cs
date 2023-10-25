@@ -48,7 +48,7 @@ select row_number() over (order by t.ping desc) as row_number,
         var commandDefinition = new CommandDefinition(sql, parameters, cancellationToken: cancellationToken);
         var groupMembers      = await connection.QueryAsync<Row>(commandDefinition);
 
-        var groupMembersCountArray = groupMembers.Select(x => $"{x.RowNumber}. {x.Name} - {Math.Round(x.Ping, 2)} см");
+        var groupMembersCountArray = groupMembers.Select(x => $"{x.RowNumber}. {x.Name}: {Math.Round(x.Ping, 2)} см");
 
         var messageText = $"Статистика пинга: \n{string.Join('\n', groupMembersCountArray)}";
 
