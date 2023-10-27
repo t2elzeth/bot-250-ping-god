@@ -6,16 +6,16 @@ using Telegram.Bot.Types.Enums;
 
 namespace Bot250PingGod.Commands;
 
-public sealed class PingTelegramCommandHandler : ITelegramCommandHandler
+public sealed class CheckPingTelegramCommandHandler : ITelegramCommandHandler
 {
-    private readonly ILogger<PingTelegramCommandHandler> _logger;
+    private readonly ILogger<CheckPingTelegramCommandHandler> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ITelegramBotClient _botClient;
     private readonly GroupMemberRepository _groupMemberRepository;
     private readonly GroupRepository _groupRepository;
     private readonly MemberRepository _memberRepository;
 
-    public PingTelegramCommandHandler(ILogger<PingTelegramCommandHandler> logger,
+    public CheckPingTelegramCommandHandler(ILogger<CheckPingTelegramCommandHandler> logger,
                                       IDateTimeProvider dateTimeProvider,
                                       ITelegramBotClient botClient,
                                       GroupMemberRepository groupMemberRepository,
@@ -90,10 +90,9 @@ public sealed class PingTelegramCommandHandler : ITelegramCommandHandler
             return;
         }
 
-        var growSize = groupMember.DoPing(dateTime: dateTime);
+        groupMember.CheckPing(dateTime: dateTime);
 
-        var messageText = $"{message.From.Username ?? message.From.FirstName}, {Math.Round(growSize, 2)} мс к твоему пингу. " +
-                          $"Теперь твой пинг: {ping.Ping} мс";
+        var messageText = $"{message.From.Username ?? message.From.FirstName}, теперь твой пинг: {ping.Ping} мс";
 
         await _botClient.SendTextMessageAsync(chatId: chatId,
                                               text: messageText,

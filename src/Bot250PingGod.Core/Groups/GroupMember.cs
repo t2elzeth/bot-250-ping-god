@@ -85,21 +85,19 @@ public class GroupMember : Entity
         return Ping;
     }
 
-    public virtual decimal DoPing(UtcDateTime dateTime)
+    public virtual void CheckPing(UtcDateTime dateTime)
     {
         const int minGrowSize = -250;
         const int maxGrowSize = +250;
 
         var random   = new Random();
-        var growSize = (decimal)random.NextDouble() * (maxGrowSize - minGrowSize) + minGrowSize;
+        var nextPing = (decimal)random.NextDouble() * (maxGrowSize - minGrowSize) + minGrowSize;
 
         Ping ??= GroupMemberPing.Create(dateTime);
 
-        Ping.Ping                          = Math.Round(Ping.Ping + growSize, 2);
+        Ping.Ping                          = Math.Round(nextPing, 2);
         Ping.LastPingDateTime              = dateTime;
         Ping.LastLimitNotificationDateTime = null;
-
-        return growSize;
     }
 
     public virtual bool CanPing(UtcDateTime dateTime, out long tryAgainAfterMinutes)
