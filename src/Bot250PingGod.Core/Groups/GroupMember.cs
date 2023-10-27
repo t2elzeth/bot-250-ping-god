@@ -87,11 +87,11 @@ public class GroupMember : Entity
 
     public virtual void CheckPing(UtcDateTime dateTime)
     {
-        const int minGrowSize = -250;
-        const int maxGrowSize = +250;
+        const int minPing = 0;
+        const int maxPing = +250;
 
         var random   = new Random();
-        var nextPing = (decimal)random.NextDouble() * (maxGrowSize - minGrowSize) + minGrowSize;
+        var nextPing = (decimal)random.NextDouble() * (maxPing - minPing) + minPing;
 
         Ping ??= GroupMemberPing.Create(dateTime);
 
