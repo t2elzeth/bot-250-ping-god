@@ -15,16 +15,19 @@ public sealed class TelegramBot
     private readonly ITelegramBotClient _botClient;
     private readonly TelegramCommandHandler _telegramCommandHandler;
     private readonly MessagePlainTextHandler _messagePlainTextHandler;
+    private readonly StickerHandler _stickerHandler;
 
     public TelegramBot(ILogger<TelegramBot> logger,
                        ITelegramBotClient botClient,
                        TelegramCommandHandler telegramCommandHandler,
-                       MessagePlainTextHandler messagePlainTextHandler)
+                       MessagePlainTextHandler messagePlainTextHandler,
+                       StickerHandler stickerHandler)
     {
         _logger                  = logger;
         _botClient               = botClient;
         _telegramCommandHandler  = telegramCommandHandler;
         _messagePlainTextHandler = messagePlainTextHandler;
+        _stickerHandler          = stickerHandler;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken)
@@ -68,6 +71,12 @@ public sealed class TelegramBot
                                          Update update,
                                          CancellationToken cancellationToken)
     {
+        if (update.Message?.Sticker != null)
+        {
+            await _stickerHandler.HandleAsync(update.Message, cancellationToken);
+            return;
+        }
+
         if (update.Message is not { } message)
             return;
 
@@ -89,6 +98,7 @@ public sealed class TelegramBot
         }
 
         var chatId = message.Chat.Id;
+
 
         _logger.LogInformation("Received a '{MessageText}' message in chat {ChatId}",
                                messageText, chatId);

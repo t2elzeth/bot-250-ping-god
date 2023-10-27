@@ -40,6 +40,10 @@ public sealed class GrowPussyTelegramCommandHandler : ITelegramCommandHandler
             _logger.LogWarning("Невозможно обработать команду {TelegramCommand}, не известный отправитель сообщения",
                                command.Command);
 
+            await _botClient.DeleteMessageAsync(chatId: message.Chat.Id,
+                                                messageId: message.MessageId,
+                                                cancellationToken: cancellationToken);
+
             return;
         }
 

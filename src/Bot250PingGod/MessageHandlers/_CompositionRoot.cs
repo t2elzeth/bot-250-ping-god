@@ -9,5 +9,6 @@ public class CompositionRoot : Module
     protected override void Load(ContainerBuilder builder)
     {
         builder.RegisterType<MessagePlainTextHandler>().SingleInstance();
+        builder.RegisterType<StickerHandler>().SingleInstance();
     }
 }

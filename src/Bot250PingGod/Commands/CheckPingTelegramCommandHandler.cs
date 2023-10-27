@@ -16,11 +16,11 @@ public sealed class CheckPingTelegramCommandHandler : ITelegramCommandHandler
     private readonly MemberRepository _memberRepository;
 
     public CheckPingTelegramCommandHandler(ILogger<CheckPingTelegramCommandHandler> logger,
-                                      IDateTimeProvider dateTimeProvider,
-                                      ITelegramBotClient botClient,
-                                      GroupMemberRepository groupMemberRepository,
-                                      GroupRepository groupRepository,
-                                      MemberRepository memberRepository)
+                                           IDateTimeProvider dateTimeProvider,
+                                           ITelegramBotClient botClient,
+                                           GroupMemberRepository groupMemberRepository,
+                                           GroupRepository groupRepository,
+                                           MemberRepository memberRepository)
     {
         _logger                = logger;
         _dateTimeProvider      = dateTimeProvider;
@@ -52,6 +52,11 @@ public sealed class CheckPingTelegramCommandHandler : ITelegramCommandHandler
         {
             _logger.LogWarning("Cannot handle ping command, this command is disabled for Group#{ChatId}",
                                message.Chat.Id);
+
+            await _botClient.DeleteMessageAsync(chatId: message.Chat.Id,
+                                                messageId: message.MessageId,
+                                                cancellationToken: cancellationToken);
+
             return;
         }
 
