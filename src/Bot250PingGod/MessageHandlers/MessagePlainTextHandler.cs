@@ -1,23 +1,21 @@
-﻿using Telegram.Bot;
+﻿using Dapper;
+using Infrastructure.DataAccess;
+using NHibernate;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace Bot250PingGod.MessageHandlers;
 
 public sealed class MessagePlainTextHandler
 {
+    private readonly ISessionFactory _sessionFactory;
     private readonly ITelegramBotClient _botClient;
 
-    private readonly Dictionary<string, string> _messageAnswers = new()
+    public MessagePlainTextHandler(ISessionFactory sessionFactory,
+                                   ITelegramBotClient botClient)
     {
-        { "да", "пизда" },
-        { "нет", "пидора ответ" },
-        { "че", "хуй через плечо" },
-        { "че?", "хуй через плечо" },
-    };
-
-    public MessagePlainTextHandler(ITelegramBotClient botClient)
-    {
-        _botClient = botClient;
+        _sessionFactory = sessionFactory;
+        _botClient      = botClient;
     }
 
     public async Task HandleAsync(Message message, CancellationToken cancellationToken)
@@ -28,12 +26,40 @@ public sealed class MessagePlainTextHandler
         if (messageText is null)
             return;
 
-        if (_messageAnswers.TryGetValue(messageText.ToLower(), out var answerText))
+        const string sql = @"
+select lower(t.message_text) as message_text,
+       t.answer_text
+  from bot.plain_message_answers t;
+";
+
+        IEnumerable<MessageRow> rows;
+        await using (DbSession.Bind(_sessionFactory))
         {
+            var dbSession  = DbSession.Current;
+            var connection = dbSession.Connection;
+
+            rows = await connection.QueryAsync<MessageRow>(sql);
+        }
+
+        foreach (var row in rows)
+        {
+            var similarity = JaroWinklerDistance.Proximity(messageText.ToLower(), row.MessageText);
+            if (similarity <= 0.6)
+                continue;
+
             await _botClient.SendTextMessageAsync(chatId: chatId,
-                                                  text: answerText,
+                                                  text: row.AnswerText,
                                                   replyToMessageId: message.MessageId,
                                                   cancellationToken: cancellationToken);
+
+            break;
         }
+    }
+
+    private sealed class MessageRow
+    {
+        public string MessageText { get; init; } = null!;
+
+        public string AnswerText { get; init; } = null!;
     }
 }
