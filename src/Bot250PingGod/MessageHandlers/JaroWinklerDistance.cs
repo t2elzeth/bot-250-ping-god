@@ -14,26 +14,6 @@ public static class JaroWinklerDistance
      */
     private const int MNumChars = 4;
 
-    public static double Similarity(string firstString, string secondString)
-    {
-        return (1 - Distance(firstString, secondString)) * 100;
-    }
-
-
-    /// <summary>
-    /// Returns the Jaro-Winkler distance between the specified  
-    /// strings. The distance is symmetric and will fall in the 
-    /// range 0 (perfect match) to 1 (no match). 
-    /// </summary>
-    /// <param name="aString1">First String</param>
-    /// <param name="aString2">Second String</param>
-    /// <returns></returns>
-    public static double Distance(string aString1, string aString2)
-    {
-        return 1.0 - Proximity(aString1, aString2);
-    }
-
-
     /// <summary>
     /// Returns the Jaro-Winkler distance between the specified  
     /// strings. The distance is symmetric and will fall in the 
