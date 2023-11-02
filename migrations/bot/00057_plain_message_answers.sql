@@ -11,12 +11,12 @@ create table bot.plain_message_answers
 );
 --rollback ;
 
---changeset uamangeldiev:20
-alter table bot.groups
+--changeset uamangeldiev:30
+alter table bot.plain_message_answers
     add column is_disabled bool not null default false,
     add column min_similarity decimal not null default 0.7;
 
-alter table bot.groups
+alter table bot.plain_message_answers
     alter column is_disabled drop default,
     alter column min_similarity drop default;
 --rollback ;
