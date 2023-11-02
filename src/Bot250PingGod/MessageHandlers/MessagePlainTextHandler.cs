@@ -28,8 +28,10 @@ public sealed class MessagePlainTextHandler
 
         const string sql = @"
 select lower(t.message_text) as message_text,
-       t.answer_text
-  from bot.plain_message_answers t;
+       t.answer_text,
+       t.min_similarity
+  from bot.plain_message_answers t
+ where t.is_disabled = false;
 ";
 
         IEnumerable<MessageRow> rows;
@@ -43,8 +45,8 @@ select lower(t.message_text) as message_text,
 
         foreach (var row in rows)
         {
-            var similarity = JaroWinklerDistance.Proximity(messageText.ToLower(), row.MessageText);
-            if (similarity <= 0.6)
+            var similarity = (decimal)JaroWinklerDistance.Proximity(messageText.ToLower(), row.MessageText);
+            if (similarity <= row.MinSimilarity)
                 continue;
 
             await _botClient.SendTextMessageAsync(chatId: chatId,
@@ -61,5 +63,7 @@ select lower(t.message_text) as message_text,
         public string MessageText { get; init; } = null!;
 
         public string AnswerText { get; init; } = null!;
+        
+        public decimal MinSimilarity { get; init; }
     }
 }

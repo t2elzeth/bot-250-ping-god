@@ -10,3 +10,13 @@ create table bot.plain_message_answers
     constraint pk_plain_message_answers primary key (id)
 );
 --rollback ;
+
+--changeset uamangeldiev:20
+alter table bot.groups
+    add column is_disabled bool not null default false,
+    add column min_similarity decimal not null default 0.7;
+
+alter table bot.groups
+    alter column is_disabled drop default,
+    alter column min_similarity drop default;
+--rollback ;
