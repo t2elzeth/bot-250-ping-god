@@ -11,6 +11,11 @@ namespace Bot250PingGod;
 
 public sealed class TelegramBot
 {
+    public static readonly bool IsGonnaShutdown = true;
+
+    public static readonly string ShutdownMessage = "Я прекращаю свою работу вечером 30.11.2023 по Бишкекскому времени.\n\n" +
+                                                    "Спасибо что были со мной\u2764\ufe0f";
+
     private readonly ILogger<TelegramBot> _logger;
     private readonly ITelegramBotClient _botClient;
     private readonly TelegramCommandHandler _telegramCommandHandler;

@@ -23,6 +23,9 @@ public sealed class MessagePlainTextHandler
         var chatId      = message.Chat.Id;
         var messageText = message.Text;
 
+        if (TelegramBot.IsGonnaShutdown)
+            return;
+
         if (messageText is null)
             return;
 
@@ -63,7 +66,7 @@ select lower(t.message_text) as message_text,
         public string MessageText { get; init; } = null!;
 
         public string AnswerText { get; init; } = null!;
-        
+
         public decimal MinSimilarity { get; init; }
     }
 }

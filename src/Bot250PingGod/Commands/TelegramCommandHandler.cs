@@ -5,6 +5,7 @@ using Infrastructure.DataAccess;
 using Infrastructure.Seedwork.Providers;
 using Microsoft.Extensions.Logging;
 using NHibernate;
+using Telegram.Bot;
 
 namespace Bot250PingGod.Commands;
 
@@ -17,6 +18,7 @@ public sealed class TelegramCommandHandler
 {
     private readonly ILogger<TelegramCommandHandler> _logger;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly ITelegramBotClient _botClient;
     private readonly GroupRepository _groupRepository;
     private readonly MemberRepository _memberRepository;
     private readonly GroupMemberRepository _groupMemberRepository;
@@ -24,6 +26,7 @@ public sealed class TelegramCommandHandler
 
     public TelegramCommandHandler(ILogger<TelegramCommandHandler> logger,
                                   IDateTimeProvider dateTimeProvider,
+                                  ITelegramBotClient botClient,
                                   GroupRepository groupRepository,
                                   MemberRepository memberRepository,
                                   GroupMemberRepository groupMemberRepository,
@@ -31,6 +34,7 @@ public sealed class TelegramCommandHandler
     {
         _logger                = logger;
         _dateTimeProvider      = dateTimeProvider;
+        _botClient             = botClient;
         _groupRepository       = groupRepository;
         _memberRepository      = memberRepository;
         _groupMemberRepository = groupMemberRepository;
@@ -44,6 +48,15 @@ public sealed class TelegramCommandHandler
 
         if (message.From is null)
             return;
+
+        if (TelegramBot.IsGonnaShutdown)
+        {
+            await _botClient.SendTextMessageAsync(chatId: command.Message.Chat.Id,
+                                                  text: TelegramBot.ShutdownMessage,
+                                                  replyToMessageId: message.MessageId,
+                                                  cancellationToken: cancellationToken);
+            return;
+        }
 
         var sessionFactory = _lifetimeScope.Resolve<ISessionFactory>();
 
